@@ -1,7 +1,6 @@
 from flask import Flask
 from classes import RemoteServerClass
 from decouple import config
-import json
 app = Flask(__name__)
 
 rs = RemoteServerClass.RemoteServer(host=config('host'))
