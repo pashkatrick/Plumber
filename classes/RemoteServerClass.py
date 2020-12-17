@@ -40,6 +40,3 @@ class RemoteServer:
         command = 'grpcurl -plaintext -d \'%s\' %s %s' % (request, self.host, method)
         output = subprocess.check_output(command, shell=True)
         return json.loads(output.decode('utf-8'))
-
-
-    
