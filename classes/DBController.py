@@ -3,6 +3,7 @@ import sqlite3
 
 class DBController:
 
+    # TODO: убрать это ваще всё :peka
     def __init__(self, db='tutorial.db'):
         self.db = sqlite3.connect(db)
         self.cursor = self.db.cursor()
