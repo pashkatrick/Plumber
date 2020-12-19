@@ -2,6 +2,7 @@ venv/
 protos/
 .vscode/
 ToDo.py
+db_test.py
 .env
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -10,7 +11,7 @@ __pycache__/
 
 # C extensions
 *.so
-
+*.db*
 # Distribution / packaging
 .Python
 env/
