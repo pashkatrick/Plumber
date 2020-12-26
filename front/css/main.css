@@ -47,7 +47,7 @@ body {
 } */
 
 .show-on-hover:hover > ul.dropdown-menu {
-  display: block;    
+  display: block;
 }
 
 .black {
@@ -1587,7 +1587,7 @@ a:focus {
   /* min-width: 10rem; */
   width: 100%;
   font-size: 0.85rem;
-  
+
   /* margin: 0 0 1rem 0; */
 }
 
