@@ -22,7 +22,12 @@ I just create a GUI for [GRPCurl](https://github.com/fullstorydev/grpcurl). This
 - source venv/bin/activate
 - pip install -r requirements.txt
 ```
-Then set data to your .env ([example](https://github.com/pashkatrick/Plumber/blob/tcp-move/env-example), [details](https://pypi.org/project/python-decouple/#usage))
+Then create or set data to your .env ([example](https://github.com/pashkatrick/Plumber/blob/tcp-move/env-example), [details](https://pypi.org/project/python-decouple/#usage)), and after that:
 ```
 - python3 app.py
+```
+## Usage
+You can use second instanse of termial, to execute first command:
+```bash
+zerorpc tcp://localhost:1111 hello_world
 ```
