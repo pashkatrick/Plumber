@@ -22,7 +22,7 @@ I just create a GUI for [GRPCurl](https://github.com/fullstorydev/grpcurl). This
 - source venv/bin/activate
 - pip install -r requirements.txt
 ```
-Then set data to your .env ([example](https://github.com/pashkatrick/Plumber/env-example), [details](https://pypi.org/project/python-decouple/#usage))
+Then set data to your .env ([example](https://github.com/pashkatrick/Plumber/blob/tcp-move/env-example), [details](https://pypi.org/project/python-decouple/#usage))
 ```
 - python3 app.py
 ```
