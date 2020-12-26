@@ -1,0 +1,6 @@
+HOST=testserver.ru:82
+SERVICE=testservice.GetService
+TEST_METHOD=testservice.GetService.Get
+TEST_REQUEST={"id":10}
+DB_NAME=mydb.db
+RPC_PORT=1111
