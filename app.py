@@ -1,5 +1,5 @@
 from flask import Flask
-from classes import RemoteServerController
+from core import RemoteServerController
 
 from decouple import config
 app = Flask(__name__)
@@ -33,7 +33,7 @@ def get_message_schema_handler():
 
 @app.route('/send_request')
 def send_request_handler():
-    req = config('test_request')
+    req = config('TEST_REQUEST')
     return rs.send_request(req, config('TEST_METHOD'))
 
 
