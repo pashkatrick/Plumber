@@ -27,7 +27,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Python build
-        run: git clone ./pashkatrick/Plumber
+        run: git clone https://github.com/pashkatrick/Plumber
       # - name: Python build
       #   run: pyinstaller --onefile app.py
 
