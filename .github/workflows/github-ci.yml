@@ -26,15 +26,14 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
-      - name: Python build
-        run: git clone https://github.com/pashkatrick/Plumber
+      # - name: Python build
+      #   run: git clone https://github.com/pashkatrick/Plumber
       # - name: Python build
       #   run: pyinstaller --onefile app.py
 
       # Runs a set of commands using the runners shell
       - name: Cleanup
         run: |
-          cd Plumber
           ls -la
       # - name: Cleanup
       #   run: |
