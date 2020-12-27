@@ -28,6 +28,8 @@ jobs:
       # Runs a single command using the runners shell
       - name: Python build
         run: |
+          python3 -m venv venv
+          source venv/bin/activate
           pip install pyinstaller
           pyinstaller --onefile app.py
 
