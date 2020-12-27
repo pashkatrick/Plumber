@@ -43,11 +43,11 @@ jobs:
           ls
 
       - name: Commit changes
-      - uses: EndBug/add-and-commit@v6
+        uses: EndBug/add-and-commit@v6
         with:
           author_name: Gihub
-          message: 'add new build version'
-          add: './dist'
+          message: "add new build version"
+          add: "./dist"
       # - name: Cleanup
       #   run: |
       #     echo cleanup running...
