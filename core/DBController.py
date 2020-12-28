@@ -1,6 +1,6 @@
 from pony import orm
 from pony.orm import db_session
-from classes.models import collection, query
+from core.models import collection, query
 
 
 class DBController:
