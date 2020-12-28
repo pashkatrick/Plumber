@@ -4,6 +4,7 @@ protos/
 ToDo.py
 db_test.py
 .env
+env_example
 db_test.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -20,7 +21,7 @@ env/
 p*[23]*/
 build/
 develop-eggs/
-dist/
+dist_build/
 downloads/
 eggs/
 .eggs/
