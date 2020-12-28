@@ -4,7 +4,7 @@ protos/
 ToDo.py
 db_test.py
 .env
-env_example
+env-example
 db_test.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
