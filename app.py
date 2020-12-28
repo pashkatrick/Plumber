@@ -1,14 +1,15 @@
 from __future__ import print_function
 import zerorpc
-from core import RemoteServerController
+from core import RemoteServerController, DBController
 from decouple import config
 
 rs = RemoteServerController.RemoteServer(host=config('HOST'))
+db = DBController.DBController(db=config('DB_NAME'))
 
 
 class Api(object):
 
-    def hello_world(self):
+    def test(self):
         return 'Hello, World!'
 
     def service_list_handler(self):
@@ -20,29 +21,25 @@ class Api(object):
     def get_message_template_handler(self):
         return rs.get_message_template(method=config('TEST_METHOD'))
 
-    def get_message_schema_handler(self):
-        return rs.get_message_schema(method=config('TEST_METHOD'))
-
-    def send_request_handler(self):
-        req = config('TEST_REQUEST')
+    def send_request_handler(self, req):
         return rs.send_request(req, config('TEST_METHOD'))
 
-    def export_handler():
-        pass
+    def get_collections(self):
+        return db.get_collections()
 
-    def import_handler():
-        pass
+    def get_items_by_collection(self, id):
+        return db.get_items_by_collection(id)
 
-    def build_config_handler():
-        pass
+    def get_item(self, id):
+        return db.get_item(id)
 
 
-def _get_port():
+def __get_port():
     return config('RPC_PORT')
 
 
 def main():
-    addr = 'tcp://127.0.0.1:' + str(_get_port())
+    addr = 'tcp://127.0.0.1:' + str(__get_port())
     s = zerorpc.Server(Api())
     s.bind(addr)
     print('start running on {}'.format(addr))
