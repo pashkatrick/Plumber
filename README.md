@@ -16,6 +16,7 @@ I just create a GUI for [GRPCurl](https://github.com/fullstorydev/grpcurl). This
 
 ## Get Started 🚀
 ```bash
+- brew install grpcurl (MacOS)
 - git clone https://github.com/pashkatrick/Plumber/
 - cd Plumber
 - python3 -m venv venv
