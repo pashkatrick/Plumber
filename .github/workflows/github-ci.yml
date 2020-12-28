@@ -19,7 +19,6 @@ jobs:
           python3 -m venv venv
           source venv/bin/activate
           pip install pyinstaller
-          pre-commit run --all-files
           pyinstaller --onefile app.py
           echo cleanup running...
           rm -rf ./app.spec
