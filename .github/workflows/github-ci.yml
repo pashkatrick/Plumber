@@ -21,7 +21,6 @@ jobs:
           pip install pyinstaller
           pyinstaller --onefile app.py
           echo cleanup running...
-          rm -rf ./build
           rm -rf ./app.spec
           echo cleanup done
 
