@@ -14,11 +14,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Python build
+      - name Pre-commit
         run: |
           python3 -m venv venv
           source venv/bin/activate
+          pip install pre-commit
           pip install pyinstaller
+          pre-commit run --all-files
+
+      - name: Python build
+        run: |
           pyinstaller --onefile app.py
           echo cleanup running...
           rm -rf ./app.spec
