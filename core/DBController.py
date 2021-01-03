@@ -41,7 +41,7 @@ class DBController:
             host=i[0].Host,
             method=i[0].Method,
             request=i[0].Request,
-            collection=i[0].Collection_id
+            collection=i[0].Collection_id.Id
         )
 
     @db_session

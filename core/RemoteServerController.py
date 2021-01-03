@@ -29,7 +29,7 @@ class RemoteServer:
         return schema
 
     def get_message_template(self, method):
-        request = self._get_message_schema(method)['request']
+        request = self.__get_message_schema(method)['request']
         command = 'grpcurl -plaintext -msg-template %s describe %s' % (self.host, request)
         output = subprocess.check_output(command, shell=True)
         message_template = json.loads(output.decode('utf8').split('Message template:')[1].replace('\n', '').replace(' ', ''))
