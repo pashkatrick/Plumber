@@ -1,0 +1,31 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Python build
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install pyinstaller
+          pyinstaller --onefile app.py
+          echo cleanup running...
+          rm -rf ./app.spec
+          echo cleanup done
+
+      - uses: EndBug/add-and-commit@v6
+        with:
+          author_name: Gihub
+          message: "add new build version"
+          add: "./dist"

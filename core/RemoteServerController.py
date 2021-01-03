@@ -19,7 +19,7 @@ class RemoteServer:
         method_list = [method for method in output.decode('utf-8').split('\n') if method]
         return dict(methods=method_list)
 
-    def get_message_schema(self, method):
+    def __get_message_schema(self, method):
         command = 'grpcurl -plaintext %s describe %s' % (self.host, method)
         output = subprocess.check_output(command, shell=True)
         out = output.decode('utf-8').replace('\n', '').replace(' ', '').replace(';', '')
@@ -29,7 +29,7 @@ class RemoteServer:
         return schema
 
     def get_message_template(self, method):
-        request = self.get_message_schema(method)['request']
+        request = self.__get_message_schema(method)['request']
         command = 'grpcurl -plaintext -msg-template %s describe %s' % (self.host, request)
         output = subprocess.check_output(command, shell=True)
         message_template = json.loads(output.decode('utf8').split('Message template:')[1].replace('\n', '').replace(' ', ''))

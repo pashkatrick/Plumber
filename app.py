@@ -1,56 +1,51 @@
-from flask import Flask
-from core import RemoteServerController
-
+from __future__ import print_function
+import zerorpc
+from core import RemoteServerController, DBController
 from decouple import config
-app = Flask(__name__)
+
 rs = RemoteServerController.RemoteServer(host=config('HOST'))
+db = DBController.DBController(db=config('DB_NAME'))
 
 
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+class Api(object):
+
+    def test(self):
+        return 'Hello, World!'
+
+    def service_list_handler(self):
+        return rs.get_service_list()
+
+    def method_list_handler(self):
+        return rs.get_method_list(service=config('SERVICE'))
+
+    def get_message_template_handler(self):
+        return rs.get_message_template(method=config('TEST_METHOD'))
+
+    def send_request_handler(self):
+        req = config('TEST_REQUEST')
+        return rs.send_request(req, config('TEST_METHOD'))
+
+    def get_collections_handler(self):
+        return db.get_collections()
+
+    def get_items_by_collection_handler(self, id):
+        return db.get_items_by_collection(id=1)
+
+    def get_item_handler(self, id):
+        return db.get_item(id=1)
 
 
-@app.route('/service_list')
-def service_list_handler():
-    return rs.get_service_list()
+def __get_port():
+    return config('RPC_PORT')
 
 
-@app.route('/method_list')
-def method_list_handler():
-    return rs.get_method_list(service=config('SERVICE'))
-
-
-@app.route('/get_message_template')
-def get_message_template_handler():
-    return rs.get_message_template(method=config('TEST_METHOD'))
-
-
-@app.route('/get_message_schema')
-def get_message_schema_handler():
-    return rs.get_message_schema(method=config('TEST_METHOD'))
-
-
-@app.route('/send_request')
-def send_request_handler():
-    req = config('TEST_REQUEST')
-    return rs.send_request(req, config('TEST_METHOD'))
-
-
-@app.route('/export')
-def export_handler():
-    pass
-
-
-@app.route('/import')
-def import_handler():
-    pass
-
-
-@app.route('/build_config')
-def build_config_handler():
-    pass
+def main():
+    addr = 'tcp://127.0.0.1:' + str(__get_port())
+    s = zerorpc.Server(Api())
+    s.bind(addr)
+    print('start running on {}'.format(addr))
+    s.run()
 
 
 if __name__ == '__main__':
-    app.run(debug=False, port=3535, host='127.0.0.1')
+    main()
