@@ -1,6 +1,8 @@
+import pony.orm.dbproviders.sqlite
 from pony import orm
 from pony.orm import db_session
 from core.models import collection, item
+import json
 
 
 class DBController:
@@ -20,13 +22,13 @@ class DBController:
             items = []
             for i in list(self.item_model.select(lambda item: item.Collection_id == col)):
                 items.append(self.get_item(i.Id))
-
-            result.append(dict(collection=col.Name, items=items))
+            result.append(dict(id=col.Id, collection=col.Name, items=items))
         return dict(collections=result)
 
     @db_session
     def get_items_by_collection(self, collection_id):
-        c = list(self.collection_model.select(lambda col: col.Id == collection_id))[0]
+        c = list(self.collection_model.select(
+            lambda col: col.Id == collection_id))[0]
         items = []
         for i in list(self.item_model.select(lambda item: item.Collection_id == c)):
             items.append(self.get_item(i.Id))
@@ -62,13 +64,25 @@ class DBController:
 
     @db_session
     def remove_item(self, item_id):
-        i = self.item_model.select(lambda item: item.id == item_id)
-        i.delete()
+        i = list(self.item_model.select(lambda item: item.Id == item_id))
+        i[0].delete()
 
     @db_session
     def remove_collection(self, collection_id):
-        c = self.collection_model.select(lambda item: item.id == collection_id)
-        c.delete()
+        c = list(self.collection_model.select(lambda item: item.Id == collection_id))
+        c[0].delete()
+
+    @db_session
+    def update_item(self, __object):
+        obj = json.loads(__object)
+        i = list(self.item_model.select(lambda item: item.Id == obj['item_id']))
+        return i[0].set(
+            Name=obj['name'],
+            Host=obj['host'],
+            Method=obj['method'],
+            Request=obj['request_body'],
+            Collection_id=obj['collection_id']
+        )
 
     @db_session
     def export_collections(self):
@@ -76,8 +90,4 @@ class DBController:
 
     @db_session
     def export_collection(self, collection_id):
-        pass
-
-    @db_session
-    def update_query(self):
         pass

@@ -3,7 +3,6 @@ import zerorpc
 from core import RemoteServerController, DBController
 from decouple import config
 
-rs = RemoteServerController.RemoteServer(host=config('HOST'))
 db = DBController.DBController(db=config('DB_NAME'))
 
 
@@ -12,27 +11,36 @@ class Api(object):
     def test(self):
         return 'Hello, World!'
 
-    def service_list_handler(self):
+    def service_list_handler(self, host):
+        rs = RemoteServerController.RemoteServer(host=host)
         return rs.get_service_list()
 
-    def method_list_handler(self):
+    def method_list_handler(self, host):
+        rs = RemoteServerController.RemoteServer(host=host)
         return rs.get_method_list(service=config('SERVICE'))
 
-    def get_message_template_handler(self):
+    def get_message_template_handler(self, host):
+        rs = RemoteServerController.RemoteServer(host=host)
         return rs.get_message_template(method=config('TEST_METHOD'))
 
-    def send_request_handler(self):
-        req = config('TEST_REQUEST')
-        return rs.send_request(req, config('TEST_METHOD'))
+    def send_request_handler(self, host, req):
+        rs = RemoteServerController.RemoteServer(host=host)
+        return rs.send_request(request=req, method=config('TEST_METHOD'))
 
     def get_collections_handler(self):
         return db.get_collections()
 
+    def update_item_handler(self, __object):
+        return db.update_item(__object)
+
     def get_items_by_collection_handler(self, id):
-        return db.get_items_by_collection(id=1)
+        return db.get_items_by_collection(collection_id=id)
 
     def get_item_handler(self, id):
-        return db.get_item(id=1)
+        return db.get_item(item_id=id)
+
+    def remove_item_handler(self, id):
+        return db.remove_item(item_id=id)
 
 
 def __get_port():
