@@ -32,11 +32,20 @@ class RemoteServer:
         request = self.__get_message_schema(method)['request']
         command = 'grpcurl -plaintext -msg-template %s describe %s' % (self.host, request)
         output = subprocess.check_output(command, shell=True)
-        message_template = json.loads(output.decode('utf8').split('Message template:')[1].replace('\n', '').replace(' ', ''))
+        message_template = json.loads(output.decode('utf8').split(
+            'Message template:')[1].replace('\n', '').replace(' ', ''))
         return message_template
 
     def send_request(self, request, method):
-        # command = 'grpcurl -plaintext %r describe %r' % (self.host, method)
         command = 'grpcurl -plaintext -d \'%s\' %s %s' % (request, self.host, method)
         output = subprocess.check_output(command, shell=True)
         return json.loads(output.decode('utf-8'))
+
+    def view_method_scheme(self, method):
+        data = self.__get_message_schema(method)
+        command_request = 'grpcurl -plaintext -msg-template %s describe %s' % (self.host, data['request'])
+        command_response = 'grpcurl -plaintext -msg-template %s describe %s' % (self.host, data['response'])
+        output_request = subprocess.check_output(command_request, shell=True)
+        output_response = subprocess.check_output(command_response, shell=True)
+        scheme = output_request.decode('utf8') + '\n' + output_response.decode('utf8')
+        return scheme

@@ -19,13 +19,17 @@ class Api(object):
         rs = RemoteServerController.RemoteServer(host=host)
         return rs.get_method_list(service=config('SERVICE'))
 
-    def get_message_template_handler(self, host):
+    def get_message_template_handler(self, host, method):
         rs = RemoteServerController.RemoteServer(host=host)
-        return rs.get_message_template(method=config('TEST_METHOD'))
+        return rs.get_message_template(method=method)
 
-    def send_request_handler(self, host, req):
+    def send_request_handler(self, host, method, req):
         rs = RemoteServerController.RemoteServer(host=host)
-        return rs.send_request(request=req, method=config('TEST_METHOD'))
+        return rs.send_request(request=req, method=method)
+
+    def view_method_scheme_handler(self, host, method):
+        rs = RemoteServerController.RemoteServer(host=host)
+        return rs.view_method_scheme(method=method)
 
     def get_collections_handler(self):
         return db.get_collections()
