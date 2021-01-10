@@ -69,13 +69,15 @@ class DBController:
 
     @db_session
     def remove_collection(self, collection_id):
-        c = list(self.collection_model.select(lambda item: item.Id == collection_id))
+        c = list(self.collection_model.select(
+            lambda item: item.Id == collection_id))
         c[0].delete()
 
     @db_session
     def update_item(self, __object):
         obj = json.loads(__object)
-        i = list(self.item_model.select(lambda item: item.Id == obj['item_id']))
+        i = list(self.item_model.select(
+            lambda item: item.Id == obj['item_id']))
         return i[0].set(
             Name=obj['name'],
             Host=obj['host'],
@@ -85,9 +87,12 @@ class DBController:
         )
 
     @db_session
-    def export_collections(self):
-        pass
+    def export_collections(self, path):
+        obj = self.get_collections()
+        with open(path, 'w') as fp:
+            json.dump(obj, fp, indent=4)
+            return 'ok'
 
     @db_session
-    def export_collection(self, collection_id):
+    def import_collections(self, collection_id):
         pass
