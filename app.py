@@ -11,13 +11,9 @@ class Api(object):
     def test(self):
         return 'Hello, World!'
 
-    def service_list_handler(self, host):
-        rs = RemoteServerController.RemoteServer(host=host)
-        return rs.get_service_list()
-
     def method_list_handler(self, host):
         rs = RemoteServerController.RemoteServer(host=host)
-        return rs.get_method_list(service=config('SERVICE'))
+        return rs.get_method_list()
 
     def get_message_template_handler(self, host, method):
         rs = RemoteServerController.RemoteServer(host=host)
@@ -45,6 +41,12 @@ class Api(object):
 
     def remove_item_handler(self, id):
         return db.remove_item(item_id=id)
+
+    def export_handler(self):
+        return db.export_collections()
+
+    def import_handler(self):
+        return db.import_collections()        
 
 
 def __get_port():

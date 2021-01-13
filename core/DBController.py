@@ -94,5 +94,6 @@ class DBController:
             return 'ok'
 
     @db_session
-    def import_collections(self, collection_id):
+    # FIXME: bulk import
+    def import_collections(self):
         pass
