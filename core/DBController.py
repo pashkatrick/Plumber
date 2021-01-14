@@ -27,8 +27,7 @@ class DBController:
 
     @db_session
     def get_items_by_collection(self, collection_id):
-        c = list(self.collection_model.select(
-            lambda col: col.Id == collection_id))[0]
+        c = list(self.collection_model.select(lambda col: col.Id == collection_id))[0]
         items = []
         for i in list(self.item_model.select(lambda item: item.Collection_id == c)):
             items.append(self.get_item(i.Id))
@@ -47,13 +46,14 @@ class DBController:
         )
 
     @db_session
-    def add_item(self, name, host, method, request_body, collection_id):
+    def add_item(self, __object):
+        obj = json.loads(__object)
         return self.item_model(
-            Name=name,
-            Host=host,
-            Method=method,
-            Request=request_body,
-            Collection_id=collection_id
+            Name=obj['name'],
+            Host=obj['host'],
+            Method=obj['method'],
+            Request=obj['request_body'],
+            Collection_id=obj['collection_id']
         )
 
     @db_session
@@ -76,14 +76,21 @@ class DBController:
     @db_session
     def update_item(self, __object):
         obj = json.loads(__object)
-        i = list(self.item_model.select(
-            lambda item: item.Id == obj['item_id']))
+        i = list(self.item_model.select(lambda item: item.Id == obj['item_id']))
         return i[0].set(
             Name=obj['name'],
             Host=obj['host'],
             Method=obj['method'],
             Request=obj['request_body'],
             Collection_id=obj['collection_id']
+        )
+
+    @db_session
+    def update_collection(self, __object):
+        obj = json.loads(__object)
+        i = list(self.collection_model.select(lambda col: col.Id == obj['collection_id']))
+        return i[0].set(
+            Name=obj['name'],
         )
 
     @db_session

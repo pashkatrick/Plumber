@@ -30,23 +30,32 @@ class Api(object):
     def get_collections_handler(self):
         return db.get_collections()
 
-    def update_item_handler(self, __object):
-        return db.update_item(__object)
+    def update_collection_handler(self, __object):
+        return db.update_collection(__object)
 
-    def get_items_by_collection_handler(self, id):
-        return db.get_items_by_collection(collection_id=id)
+    def add_collection_handler(self, name):
+        return db.add_collection(name=name)
 
     def get_item_handler(self, id):
         return db.get_item(item_id=id)
 
+    def add_item_handler(self, __object):
+        return db.add_item(__object)
+
+    def update_item_handler(self, __object):
+        return db.update_item(__object)
+
     def remove_item_handler(self, id):
         return db.remove_item(item_id=id)
+
+    def get_items_by_collection_handler(self, id):
+        return db.get_items_by_collection(collection_id=id)
 
     def export_handler(self):
         return db.export_collections()
 
     def import_handler(self):
-        return db.import_collections()        
+        return db.import_collections()
 
 
 def __get_port():
