@@ -20,15 +20,14 @@
         "Testing"
     ],
     "dependencies": {
-        "electron-localshortcut": "^3.2.1",
         "monaco-editor": "^0.17.0",
         "monaco-loader": "^1.0.0",
         "zerorpc": "^0.9.8"
     },
     "devDependencies": {
+        "electron-localshortcut": "^3.2.1",
+        "electron-squirrel-startup": "^1.0.0",        
         "electron": "^4.2.12",
-        "electron-builder": "^22.9.1",
-        "electron-packager": "^13.1.1",
         "electron-rebuild": "^1.11.0",
         "electron-reloader": "^1.1.0"
     },
@@ -38,7 +37,7 @@
         "copyright": "Copyright © since 2020, pashkatrick",
         "asar": false,
         "directories": {
-            "output": "release"
+            "output": "release-build"
         },
         "mac": {
             "target": [
@@ -48,6 +47,13 @@
             "icon": "assets/app.icns",
             "bundleVersion": "beta"
         },
-        "dmg": {}
+        "win": {
+            "target": [
+                "nsis"
+            ],
+            "icon": "assets/app.ico"
+        },        
+        "dmg": {},
+        "nsis": {}
     }
 }

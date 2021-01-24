@@ -123,7 +123,7 @@ pre {
 
 #request,
 #response {
-  height: 75vh;
+  height: 77vh;
   padding-top: 9px;
   margin-left: -15px;
 }
@@ -399,7 +399,7 @@ hr {
   #request,
   #response {
     height: 85vh;
-  }   
+  }
 }
 
 .navbar input {
@@ -860,7 +860,7 @@ button.close {
   background-color: transparent;
   border: 0;
 }
-/* 
+/*
 .modal {
   position: fixed;
   top: 0;
@@ -1450,7 +1450,7 @@ a:focus {
   text-align: center;
   padding: 0.75rem 1rem;
   width: 6.5rem;
-  /* overflow:hidden; 
+  /* overflow:hidden;
   text-overflow: ellipsis; */
 }
 
@@ -1604,7 +1604,7 @@ a:focus {
     display: inline;
     text-overflow: ellipsis;
     white-space: nowrap;
-    overflow: hidden;  
+    overflow: hidden;
     max-width: 80%;
   }
   .sidebar .sidebar-heading {

@@ -296,7 +296,7 @@ function _generateTab(id, saved, tabName) {
                         <a href="#" class="btn bg-grey" id="refresh">
                             <span class="emoji">🔄</span>
                         </a>
-                    </li>                                    
+                    </li>
                     <li class="nav-item mx-2">
                         <select name="select" id="methods" class="form-control bg-grey">
                             <!--
@@ -305,7 +305,7 @@ function _generateTab(id, saved, tabName) {
                             <option value="value3">Метод 3</option>
                             -->
                         </select>
-                    </li>                                    
+                    </li>
                     <li class="nav-item">
                         <a href="#" class="btn bg-grey" id="save">
                             <span class="emoji">💾</span>
@@ -315,12 +315,12 @@ function _generateTab(id, saved, tabName) {
                         <a href="#" class="btn bg-grey mx-2" id="template">
                             <span class="emoji">📄</span>
                         </a>
-                    </li>    
+                    </li>
                     <li class="nav-item">
                         <a href="#" class="btn bg-grey" id="trash">
                             <span class="emoji">🗑️</span>
                         </a>
-                    </li>                                    
+                    </li>
                 </ul>
             </nav>
             <div class="container-fluid bb">
@@ -350,7 +350,7 @@ function _generateTab(id, saved, tabName) {
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
     `)
     document.querySelector('#myTabContent').appendChild(tabContent)
     monacoInit('tab-' + id)
@@ -417,8 +417,8 @@ function loadColections() {
                                         <a href="#" id="remove-collection">🗑️</a>
                                     </li>
                                 </ul>
-                            </div>      
-                        </div>                                   
+                            </div>
+                        </div>
                         <div id="${identic}" class="collapse" aria-labelledby="heading${cols[i]}" data-parent="#accordionSidebar" style="">
                             <div class="py-2 collapse-inner">
                                 ${child}

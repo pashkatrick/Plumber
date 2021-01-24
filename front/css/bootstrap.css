@@ -119,7 +119,7 @@ a:hover {
 button {
   border-radius: 0;
 }
-/* 
+/*
 button:focus {
   outline: 1px dotted;
   outline: 5px auto -webkit-focus-ring-color;
@@ -249,7 +249,7 @@ hr {
     max-width: 50%;
   }
 }
-/*   
+/*
   .form-control {
     display: block;
     width: 100%;

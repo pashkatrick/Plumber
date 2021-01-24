@@ -61,3 +61,4 @@ env
 **/src/
 .DS_Store
 package-lock.json
+release-build

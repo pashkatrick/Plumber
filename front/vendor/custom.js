@@ -6,7 +6,7 @@ $(document).ready(function () {
 
     // $('#send').click(function () {
     //     showSuccess()
-    // }); 
+    // });
 });
 
 
