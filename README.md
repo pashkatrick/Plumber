@@ -1,5 +1,5 @@
-# Plumber
-Postman for GRPC
+# Plumber 
+Like Postman^ just for GRPC
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![build-with-electron](https://img.shields.io/badge/Build%20with-Electron-1f425f.svg)](https://www.electronjs.org/)
 [![changelog](https://img.shields.io/badge/changelog-👈-green.svg)](https://pshktrck.ru/plumber/)
