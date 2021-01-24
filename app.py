@@ -34,13 +34,16 @@ class Api(object):
         return db.update_collection(__object)
 
     def add_collection_handler(self, name):
-        return db.add_collection(name=name)
+        return db.add_collection(name=name).Id
+
+    def remove_collection_handler(self, id):
+        return db.remove_collection(collection_id=id)
 
     def get_item_handler(self, id):
         return db.get_item(item_id=id)
 
     def add_item_handler(self, __object):
-        return db.add_item(__object)
+        return db.add_item(__object).Id
 
     def update_item_handler(self, __object):
         return db.update_item(__object)

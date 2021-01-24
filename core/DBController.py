@@ -27,7 +27,8 @@ class DBController:
 
     @db_session
     def get_items_by_collection(self, collection_id):
-        c = list(self.collection_model.select(lambda col: col.Id == collection_id))[0]
+        c = list(self.collection_model.select(
+            lambda col: col.Id == collection_id))[0]
         items = []
         for i in list(self.item_model.select(lambda item: item.Collection_id == c)):
             items.append(self.get_item(i.Id))
@@ -90,7 +91,7 @@ class DBController:
         obj = json.loads(__object)
         i = list(self.collection_model.select(lambda col: col.Id == obj['collection_id']))
         return i[0].set(
-            Name=obj['name'],
+            Name=obj['name']
         )
 
     @db_session
