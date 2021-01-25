@@ -1,16 +1,25 @@
-# Plumber 
-Like Postman^ just for GRPC
-[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
-[![build-with-electron](https://img.shields.io/badge/Build%20with-Electron-1f425f.svg)](https://www.electronjs.org/)
-[![changelog](https://img.shields.io/badge/changelog-👈-green.svg)](https://pshktrck.ru/plumber/)
-[![project news](https://img.shields.io/badge/telegram-🔔-green.svg)](https://t.me/plumberpc)
+<p align="center">
+  <img src="./assets/app.ico" />
+</p>
+<h1 align="center">Plumber</h1>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg" />    
+  <img src="https://img.shields.io/badge/Build%20with-Electron-1f425f.svg" />
+  <a href="https://pshktrck.ru/plumber/">
+    <img src="https://img.shields.io/badge/changelog-👈-green.svg" />
+  </a>
+  <a href="https://t.me/plumberpc">
+    <img src="https://img.shields.io/badge/telegram-🔔-green.svg" />
+  </a>  
+</p>
 
+<p align="center">Like Postman, just for GRPC</p>
+<p align="center">Thanks <a href="https://github.com/warmuuh/milkman">Milkman</a> and <a href="https://github.com/uw-labs/bloomrpc">Bloom</a> for inpiration.</p>
 
-*Thanks [Milkman](https://github.com/warmuuh/milkman) and [Bloom](https://github.com/uw-labs/bloomrpc) for inpiration.*
 
 ## About
-I just create a GUI for [GRPCurl](https://github.com/fullstorydev/grpcurl). This is a attempt at creating a simple tool that can speed up testing process.
+I just create a GUI for [GRPCurl](https://github.com/fullstorydev/grpcurl). This is a attempt at creating a simple tool that can speed up GRPC ervises testing process.
 
 ## Features
 ...
