@@ -30,7 +30,7 @@ I just create a GUI for [GRPCurl](https://github.com/fullstorydev/grpcurl). This
 - Node.js
 - Python3
 - Python2
-- xcode (или xcode-tools) for MacOS
+- xcode (or xcode-tools) for MacOS
 
 ### Now, build
 ```bash
