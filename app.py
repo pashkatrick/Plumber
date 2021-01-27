@@ -3,7 +3,7 @@ import zerorpc
 from core import RemoteServerController, DBController
 from decouple import config
 
-db = DBController.DBController(db=config('DB_NAME'))
+db = DBController.DBController(db='pony.db')
 
 
 class Api(object):
