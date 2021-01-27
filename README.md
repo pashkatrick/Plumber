@@ -25,6 +25,14 @@ I just create a GUI for [GRPCurl](https://github.com/fullstorydev/grpcurl). This
 ...
 
 ## Build and launch 🚀
+
+### requirenments
+- Node.js
+- Python3
+- Python2
+- xcode (или xcode-tools) for MacOS
+
+### Now, build
 ```bash
 - brew install grpcurl (MacOS)
 - git clone https://github.com/pashkatrick/Plumber/
