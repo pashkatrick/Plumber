@@ -62,3 +62,4 @@ env
 .DS_Store
 package-lock.json
 release-build
+proto_test.py
