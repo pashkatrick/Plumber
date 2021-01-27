@@ -10,7 +10,9 @@ db_test.py
 __pycache__/
 *.py[cod]
 *$py.class
-
+protos/
+node_modules
+builder
 # C extensions
 *.so
 *.db*
@@ -93,3 +95,4 @@ env
 
 # MacOS artifacts
 .DS_Store
+proto_test.py
