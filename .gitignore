@@ -1,22 +1,25 @@
-venv/
+venv2/
 protos/
 .vscode/
 ToDo.py
 db_test.py
 .env
-env_example
+env-example
+builder
 db_test.py
-# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+<<<<<<< HEAD
 protos/
 node_modules
 builder
 # C extensions
+=======
+node_modules
+>>>>>>> 186e72f787c1e299407f50f23d7c17893e6d292f
 *.so
 *.db*
-# Distribution / packaging
 .Python
 env/
 [v.]env*/
@@ -35,17 +38,10 @@ var/
 .installed.cfg
 *.egg*/
 venv/
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
-
-# Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
-
-# Unit test / coverage reports
 htmlcov/
 .tox/
 .coverage
@@ -55,44 +51,22 @@ nosetests.xml
 coverage.xml
 *,cover
 coverage_output
-
-# Translations
 *.mo
 *.pot
-
-# Django stuff:
 *.log
-
-# Sphinx documentation
 docs/_build/
-
-#Sonarqube
 .scannerwork
-
-# PyBuilder
 target/
-
-# IDEA
 .project
 .idea
 *.iml
-
-# Allure ignore
 **/allure-report/
 **/output/
-
-# virtualenv
 env
-
-# PyTest
 .pytest_cache
-
-#pyenv
 .python-version
-
-#sources folder
 **/src/
-
-# MacOS artifacts
 .DS_Store
 proto_test.py
+package-lock.json
+release-build

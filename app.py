@@ -3,7 +3,6 @@ import zerorpc
 from core import RemoteServerController, DBController
 from decouple import config
 
-rs = RemoteServerController.RemoteServer(host=config('HOST'))
 db = DBController.DBController(db=config('DB_NAME'))
 
 
@@ -12,26 +11,54 @@ class Api(object):
     def test(self):
         return 'Hello, World!'
 
-    def service_list_handler(self):
-        return rs.get_service_list()
+    def method_list_handler(self, host):
+        rs = RemoteServerController.RemoteServer(host=host)
+        return rs.get_method_list()
 
-    def method_list_handler(self):
-        return rs.get_method_list(service=config('SERVICE'))
+    def get_message_template_handler(self, host, method):
+        rs = RemoteServerController.RemoteServer(host=host)
+        return rs.get_message_template(method=method)
 
-    def get_message_template_handler(self):
-        return rs.get_message_template(method=config('TEST_METHOD'))
+    def send_request_handler(self, host, method, req):
+        rs = RemoteServerController.RemoteServer(host=host)
+        return rs.send_request(request=req, method=method)
 
-    def send_request_handler(self, req):
-        return rs.send_request(req, config('TEST_METHOD'))
+    def view_method_scheme_handler(self, host, method):
+        rs = RemoteServerController.RemoteServer(host=host)
+        return rs.view_method_scheme(method=method)
 
-    def get_collections(self):
+    def get_collections_handler(self):
         return db.get_collections()
 
-    def get_items_by_collection(self, id):
-        return db.get_items_by_collection(id)
+    def update_collection_handler(self, __object):
+        return db.update_collection(__object)
 
-    def get_item(self, id):
-        return db.get_item(id)
+    def add_collection_handler(self, name):
+        return db.add_collection(name=name).Id
+
+    def remove_collection_handler(self, id):
+        return db.remove_collection(collection_id=id)
+
+    def get_item_handler(self, id):
+        return db.get_item(item_id=id)
+
+    def add_item_handler(self, __object):
+        return db.add_item(__object).Id
+
+    def update_item_handler(self, __object):
+        return db.update_item(__object)
+
+    def remove_item_handler(self, id):
+        return db.remove_item(item_id=id)
+
+    def get_items_by_collection_handler(self, id):
+        return db.get_items_by_collection(collection_id=id)
+
+    def export_handler(self):
+        return db.export_collections()
+
+    def import_handler(self):
+        return db.import_collections()
 
 
 def __get_port():

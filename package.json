@@ -1,0 +1,59 @@
+{
+    "name": "Plumber",
+    "version": "0.1.0",
+    "description": "A really missing GUI for GRPC requests",
+    "author": "mannidung",
+    "main": "main.js",
+    "homepage": "https://pshktrck.ru/plumber/",
+    "license": "MIT",
+    "scripts": {
+        "start": "electron .",
+        "npm-install": "node_modules/.bin/electron-rebuild; npm install",
+        "dist": "electron-builder build"
+    },
+    "repository": "https://github.com/pashkatrick/Plumber",
+    "keywords": [
+        "Electron",
+        "Python",
+        "GRPC",
+        "Requests",
+        "Testing"
+    ],
+    "dependencies": {
+        "monaco-editor": "^0.17.0",
+        "monaco-loader": "^1.0.0",
+        "zerorpc": "^0.9.8"
+    },
+    "devDependencies": {
+        "electron-localshortcut": "^3.2.1",
+        "electron-squirrel-startup": "^1.0.0",        
+        "electron": "^4.2.12",
+        "electron-rebuild": "^1.11.0",
+        "electron-reloader": "^1.1.0"
+    },
+    "build": {
+        "appId": "com.pashkatrick.Plumber",
+        "productName": "Plumber",
+        "copyright": "Copyright © since 2020, pashkatrick",
+        "asar": false,
+        "directories": {
+            "output": "release-build"
+        },
+        "mac": {
+            "target": [
+                "dmg"
+            ],
+            "category": "public.app-category.developer-tools",
+            "icon": "assets/app.icns",
+            "bundleVersion": "beta"
+        },
+        "win": {
+            "target": [
+                "nsis"
+            ],
+            "icon": "assets/app.ico"
+        },        
+        "dmg": {},
+        "nsis": {}
+    }
+}
