@@ -60,5 +60,5 @@ Then create or set data to your .env ([example](https://github.com/pashkatrick/P
 ```
 You can use second instanse of termial, to execute first test command:
 ```bash
-zerorpc tcp://localhost:1111 hello_world
+zerorpc tcp://localhost:1111 test
 ```
