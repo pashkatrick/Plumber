@@ -3,6 +3,7 @@ import zerorpc
 from core import RemoteServerController, DBController
 from decouple import config
 
+# TODO: может ломать сборку 
 db = DBController.DBController(db=config('DB_NAME'))
 
 
@@ -55,10 +56,10 @@ class Api(object):
         return db.get_items_by_collection(collection_id=id)
 
     def export_handler(self):
-        return db.export_collections()
+        return db.export_collections(path=config('EXPORT'))
 
     def import_handler(self):
-        return db.import_collections()
+        return db.import_collections(path=config('IMPORT'))
 
 
 def __get_port():

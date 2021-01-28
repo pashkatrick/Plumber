@@ -264,12 +264,12 @@ function elementFromHTML(htmlString) {
     return div.firstChild;
 }
 
-function addNewTab(tab_id = 0, tabName = 'Untitled ') {
+function addNewTab(tab_id = 0, tabName = 'Unsaved') {
     document.querySelector('a.nav-link.active').classList.remove('active')
     document.querySelector('.tab-pane.fade.show.active').classList.remove('show', 'active')
     if (tab_id == 0) { //если ничего не передали - возвращаем новую
         var num = getRandomInt(100)
-        _generateTab(num, false, tabName + num)
+        _generateTab(num, false, tabName)
     } else if (document.querySelector('#tab-' + tab_id)) { //если передали существующую, открываем ее
         var el = document.querySelector('a[href="#tab-' + tab_id + '"]');
         el.classList.add('active')
@@ -288,7 +288,7 @@ function _generateTab(id, saved, tabName) {
             <nav class="navbar navbar-expand navbar-light topbar static-top bb">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item mx-2">
-                        <input type="text" id="host" class="form-control bg-grey" placeholder="${'tab-' + id}" />
+                        <input type="text" id="host" class="form-control bg-grey" placeholder="server:82" />
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">

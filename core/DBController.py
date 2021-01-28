@@ -101,7 +101,20 @@ class DBController:
             json.dump(obj, fp, indent=4)
             return 'ok'
 
-    @db_session
-    # FIXME: bulk import
-    def import_collections(self):
-        pass
+    
+    def import_collections(self, path):
+        with open(path) as f:
+            content_to_import = json.load(f)
+        for col in content_to_import['collections']:
+            self.add_collection(col['collection'])
+            for item in col['items']:
+                obj = dict(
+                    name=item['name'],
+                    host=item['host'],
+                    method=item['method'],
+                    request_body=item['request'],
+                    collection_id=col['id']
+                )    
+                self.add_item(json.dumps(obj))
+        return 'ok'
+        
