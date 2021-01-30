@@ -9,7 +9,7 @@ db = DBController.DBController(db='pony.db')
 class Api(object):
 
     def test(self):
-        return 'Hello, World!'
+        return 'Success!'
 
     def method_list_handler(self, host):
         rs = RemoteServerController.RemoteServer(host=host)
