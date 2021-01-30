@@ -21,6 +21,12 @@
 ## About
 I just create a GUI for [GRPCurl](https://github.com/fullstorydev/grpcurl). This is a attempt at creating a simple tool that can speed up GRPC ervises testing process.
 
+<p align="center"><img src="./assets/screenshot.jpg" /></p>
+
+## ⚡ Important
+> This version doesn't support import proto files or protosets yet (will be).  
+> You can use it only with servers, which support reflection API.
+
 ## Features
 ...
 
