@@ -15,16 +15,19 @@ def run_server():
 
 
 @pytest.mark.usefixtures('run_server')
-class TestCollections:
+class TestItems:
 
-    def test_get_collections_handler(self):
+    def test_get_item_handler(self):
         pass
 
-    def test_update_collection_handler(self):
+    def test_add_item_handler(self):
         pass
 
-    def test_add_collection_handler(self):
+    def test_update_item_handler(self):
         pass
 
-    def test_remove_collection_handler(self):
+    def test_remove_item_handler(self):
+        pass
+
+    def test_get_items_by_collection_handler(self):
         pass
