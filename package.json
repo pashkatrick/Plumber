@@ -26,7 +26,7 @@
     },
     "devDependencies": {
         "electron-localshortcut": "^3.2.1",
-        "electron-squirrel-startup": "^1.0.0",        
+        "electron-squirrel-startup": "^1.0.0",
         "electron": "^4.2.12",
         "electron-rebuild": "^1.11.0",
         "electron-reloader": "^1.1.0"
@@ -52,7 +52,7 @@
                 "nsis"
             ],
             "icon": "assets/app.ico"
-        },        
+        },
         "dmg": {},
         "nsis": {}
     }

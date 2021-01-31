@@ -4,7 +4,7 @@
 <h1 align="center">Plumber</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg" />    
+  <img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg" />  
   <img src="https://img.shields.io/badge/Build%20with-Electron-1f425f.svg" />
   <a href="https://pshktrck.ru/plumber/">
     <img src="https://img.shields.io/badge/changelog-👈-green.svg" />

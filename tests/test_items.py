@@ -1,15 +1,10 @@
 import pytest
-import os
-import sys
-import subprocess
 from subprocess import Popen
-import json
-from decouple import config
 
 
 @pytest.fixture(scope='class')
 def run_server():
-    process = Popen(["python3", "app.py"])
+    process = Popen(['python3', 'app.py'])
     yield
     process.kill()
 
