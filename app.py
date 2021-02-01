@@ -54,8 +54,8 @@ class Api(object):
     def get_items_by_collection_handler(self, id):
         return db.get_items_by_collection(collection_id=id)
 
-    def export_handler(self):
-        return db.export_collections()
+    def export_handler(self, path):
+        return db.export_collections(path)
 
     def import_handler(self):
         return db.import_collections()

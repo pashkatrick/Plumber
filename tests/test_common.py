@@ -2,6 +2,7 @@ import pytest
 import subprocess
 from subprocess import Popen
 from decouple import config
+import os
 
 
 @pytest.fixture(scope='class')
@@ -31,8 +32,7 @@ class TestCommon:
         assert output != ''
 
     def test_get_message_template_handler(self):
-        command = self.cmd + \
-            ' get_message_template_handler %s %s' % (self.host, self.method)
+        command = self.cmd + ' get_message_template_handler %s %s' % (self.host, self.method)
         output = subprocess.check_output(command, shell=True).decode('utf-8')
         assert output != ''
 
@@ -40,10 +40,16 @@ class TestCommon:
         pass
 
     def test_view_method_scheme_handler(self):
-        pass
+        command = self.cmd + ' view_method_scheme_handler %s %s' % (self.host, self.method)
+        output = subprocess.check_output(command, shell=True).decode('utf-8')
+        assert output != ''
 
     def test_export_handler(self):
-        pass
+        path = 'test-exoprt.json'
+        command = self.cmd + ' export_handler %s' % (path)
+        output = subprocess.check_output(command, shell=True).decode('utf-8')
+        os.remove(path)
+        assert output == "'ok'\n"
 
     def test_import_handler(self):
         pass
