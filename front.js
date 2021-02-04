@@ -1,5 +1,7 @@
 const API = require("./api-client").API
 const { ipcRenderer } = require('electron');
+const remote = require("electron").remote;
+const dialog = remote.dialog;
 const monaco = require('monaco-loader');
 let loader = document.querySelector('#loader')
 let newTab = document.querySelector('#new')
@@ -128,6 +130,15 @@ document.addEventListener('click', function (e) {
             showWarning('Complete form fields first')
         }
         closeModal()
+    } else if (isOnId(e.path, 'export')) {
+        var export_path = dialog.showOpenDialog(remote.getCurrentWindow(), { properties: ['openDirectory'] })
+        exportCollections(export_path + '/plumber-export.json')
+    } else if (isOnId(e.path, 'import')) {
+        var import_file = dialog.showOpenDialog(remote.getCurrentWindow(), {
+            properties: ['openFile'],
+            filters: [{ name: "All Files", extensions: ["json"] }]
+        })
+        importCollections(import_file)
     }
 });
 
@@ -387,10 +398,12 @@ function loadColections() {
             var items = cols[i].items
 
             // Модалка
-            var option = document.createElement("option");
-            option.value = cols[i].id
-            option.text = cols[i].collection
-            modalList.appendChild(option)
+            if (items.length > 0) {
+                var option = document.createElement("option");
+                option.value = cols[i].id
+                option.text = cols[i].collection
+                modalList.appendChild(option)
+            }
 
             // ДЛЯ ТЕСТА, TODO: вернуть if
             if (items.length > 0) {
@@ -507,4 +520,20 @@ function showWarning(msg) {
     setTimeout(() => {
         _block.style.opacity = '0'
     }, 3500);
+}
+
+function exportCollections(path) {
+    API.export_collections(path, (result) => {
+        _obj = getCurrentTab()
+        showSuccess(_obj)
+    })
+}
+
+function importCollections(path) {
+    console.log(path[0])
+    API.import_collections(path[0], (result) => {
+        _obj = getCurrentTab()
+        showSuccess(_obj)
+        console.log(result)
+    })
 }

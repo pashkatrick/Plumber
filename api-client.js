@@ -111,6 +111,26 @@ const API = {
             }
         })
     },
+    export_collections: (path, callback) => {
+        client.invoke("export_handler", path, (error, result) => {
+            if (error) {
+                console.log(error)
+                return null
+            } else {
+                callback(result)
+            }
+        })
+    },
+    import_collections: (path, callback) => {
+        client.invoke("import_handler", path, (error, result) => {
+            if (error) {
+                console.log(error)
+                return null
+            } else {
+                callback(result)
+            }
+        })
+    },
     // ITEMS
     get_item: (id, callback) => {
         client.invoke("get_item_handler", id, (error, result) => {

@@ -1,9 +1,9 @@
 from __future__ import print_function
 import zerorpc
-from core import RemoteServerController, DBController
+from core import ServerController, DBController
 from decouple import config
 
-# TODO: может ломать сборку 
+# TODO: может ломать сборку
 db = DBController.DBController(db=config('DB_NAME'))
 
 
@@ -13,19 +13,19 @@ class Api(object):
         return 'Hello, World!'
 
     def method_list_handler(self, host):
-        rs = RemoteServerController.RemoteServer(host=host)
+        rs = ServerController.RemoteServer(host=host)
         return rs.get_method_list()
 
     def get_message_template_handler(self, host, method):
-        rs = RemoteServerController.RemoteServer(host=host)
+        rs = ServerController.RemoteServer(host=host)
         return rs.get_message_template(method=method)
 
     def send_request_handler(self, host, method, req):
-        rs = RemoteServerController.RemoteServer(host=host)
+        rs = ServerController.RemoteServer(host=host)
         return rs.send_request(request=req, method=method)
 
     def view_method_scheme_handler(self, host, method):
-        rs = RemoteServerController.RemoteServer(host=host)
+        rs = ServerController.RemoteServer(host=host)
         return rs.view_method_scheme(method=method)
 
     def get_collections_handler(self):
@@ -55,11 +55,11 @@ class Api(object):
     def get_items_by_collection_handler(self, id):
         return db.get_items_by_collection(collection_id=id)
 
-    def export_handler(self):
-        return db.export_collections(path=config('EXPORT'))
+    def export_handler(self, export_path):
+        return db.export_collections(path=export_path)
 
-    def import_handler(self):
-        return db.import_collections(path=config('IMPORT'))
+    def import_handler(self, import_path):
+        return db.import_collections(path=import_path)
 
 
 def __get_port():

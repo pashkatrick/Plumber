@@ -63,3 +63,5 @@ env
 package-lock.json
 release-build
 proto_test.py
+grpcurl
+release-*
