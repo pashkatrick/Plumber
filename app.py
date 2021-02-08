@@ -4,7 +4,7 @@ from core import ServerController, DBController
 from decouple import config
 
 # TODO: может ломать сборку
-db = DBController.DBController(db=config('DB_NAME'))
+db = DBController.DBController(db='pony.db')
 
 
 class Api(object):
