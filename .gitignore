@@ -11,6 +11,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 node_modules
+protos/
+node_modules
+builder
+# C extensions
+node_modules
 *.so
 *.db*
 .Python
@@ -65,3 +70,6 @@ release-build
 proto_test.py
 grpcurl
 release-*
+proto_test.py
+package-lock.json
+release-build

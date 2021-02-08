@@ -105,8 +105,7 @@ function createWindow() {
     minHeight: 800,
     webPreferences: {
       nodeIntegration: true,
-      experimentalFeatures: true,
-      // enableRemoteModule: true
+      experimentalFeatures: true
     }
   })
 
@@ -326,6 +325,6 @@ app.on('browser-window-focus', function () {
 })
 
 // Hot Reload
-try {
-  require('electron-reloader')(module)
-} catch (_) { }
+// try {
+//   require('electron-reloader')(module)
+// } catch (_) { }

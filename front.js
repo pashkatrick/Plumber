@@ -281,6 +281,7 @@ function addNewTab(tab_id = 0, tabName = 'Unsaved') {
     if (tab_id == 0) { //если ничего не передали - возвращаем новую
         var num = getRandomInt(100)
         _generateTab(num, false, tabName)
+
     } else if (document.querySelector('#tab-' + tab_id)) { //если передали существующую, открываем ее
         var el = document.querySelector('a[href="#tab-' + tab_id + '"]');
         el.classList.add('active')
@@ -405,7 +406,6 @@ function loadColections() {
                 modalList.appendChild(option)
             }
 
-            // ДЛЯ ТЕСТА, TODO: вернуть if
             if (items.length > 0) {
                 let child = '';
                 items.forEach(item => child += '<a class="collapse-item" data-id="' + item.id + '" href="#">' + item.name + '</a>');

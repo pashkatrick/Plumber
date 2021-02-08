@@ -77,7 +77,8 @@ class DBController:
     @db_session
     def update_item(self, __object):
         obj = json.loads(__object)
-        i = list(self.item_model.select(lambda item: item.Id == obj['item_id']))
+        i = list(self.item_model.select(
+            lambda item: item.Id == obj['item_id']))
         return i[0].set(
             Name=obj['name'],
             Host=obj['host'],
@@ -89,7 +90,8 @@ class DBController:
     @db_session
     def update_collection(self, __object):
         obj = json.loads(__object)
-        i = list(self.collection_model.select(lambda col: col.Id == obj['collection_id']))
+        i = list(self.collection_model.select(
+            lambda col: col.Id == obj['collection_id']))
         return i[0].set(
             Name=obj['name']
         )
@@ -101,20 +103,18 @@ class DBController:
             json.dump(obj, fp, indent=4)
             return 'ok'
 
-    
     def import_collections(self, path):
         with open(path) as f:
             content_to_import = json.load(f)
         for col in content_to_import['collections']:
             self.add_collection(col['collection'])
-            for item in col['items']:
+            for query in col['items']:
                 obj = dict(
-                    name=item['name'],
-                    host=item['host'],
-                    method=item['method'],
-                    request_body=item['request'],
+                    name=query['name'],
+                    host=query['host'],
+                    method=query['method'],
+                    request_body=query['request'],
                     collection_id=col['id']
-                )    
+                )
                 self.add_item(json.dumps(obj))
         return 'ok'
-        

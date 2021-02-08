@@ -3,7 +3,6 @@ import zerorpc
 from core import ServerController, DBController
 from decouple import config
 
-# TODO: может ломать сборку
 db = DBController.DBController(db='pony.db')
 
 
