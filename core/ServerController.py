@@ -7,17 +7,17 @@ class RemoteServer:
     def __init__(self, host):
         self.host = host
 
-    def __get_service_list(self):
-        command = './grpcurl -plaintext %s list' % (self.host)
+    def __get_service_list(self, path):
+        command = '%s -plaintext %s list' % (path, self.host)
         output = subprocess.check_output(command, shell=True)
         service_list = [service for service in output.decode('utf-8').split('\n') if service]
         return dict(services=service_list)
 
-    def get_method_list(self):
-        services = self.__get_service_list()['services']
+    def get_method_list(self, path):
+        services = self.__get_service_list(path)['services']
         result = []
         for service in services:
-            command = './grpcurl -plaintext %s list %s' % (self.host, service)
+            command = '%s -plaintext %s list %s' % (path, self.host, service)
             output = subprocess.check_output(command, shell=True)
             method_list = [method for method in output.decode('utf-8').split('\n') if method]
             result.append(dict(service=service, methods=method_list))

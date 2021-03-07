@@ -242,7 +242,6 @@ function openModal() {
 function closeModal() {
     document.querySelector('#collectionModal').style.display = 'none'
     document.querySelector('#collection-name').innerHTML = ''
-    // document.querySelector('#collections').innerHTML = ''
     document.querySelector('#item-name').innerHTML = ''
 }
 
@@ -536,4 +535,5 @@ function importCollections(path) {
         showSuccess(_obj)
         console.log(result)
     })
+    loadColections()
 }

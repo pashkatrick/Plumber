@@ -11,9 +11,9 @@ class Api(object):
     def test(self):
         return 'Hello, World!'
 
-    def method_list_handler(self, host):
+    def method_list_handler(self, host, path):
         rs = ServerController.RemoteServer(host=host)
-        return rs.get_method_list()
+        return rs.get_method_list(path)
 
     def get_message_template_handler(self, host, method):
         rs = ServerController.RemoteServer(host=host)

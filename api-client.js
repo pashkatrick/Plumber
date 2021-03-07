@@ -1,5 +1,7 @@
 const zerorpc = require('zerorpc')
 const config = require('./config')
+const appRootDir = require('app-root-dir').get();
+const GRPC = appRootDir + '/bin/grpcurl';
 
 // Create zerorpc client
 let client = new zerorpc.Client()
@@ -41,7 +43,9 @@ const API = {
         })
     },
     method_list: (host, callback) => {
-        client.invoke("method_list_handler", host, (error, result) => {
+        // TODO: убрать после тестов
+        console.log(GRPC)
+        client.invoke("method_list_handler", host, GRPC, (error, result) => {
             if (error) {
                 console.log(error)
                 return null

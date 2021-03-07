@@ -9,7 +9,7 @@
     "scripts": {
         "start": "electron .",
         "npm-install": "node_modules/.bin/electron-rebuild; npm install",
-        "dist": "electron-builder build"
+        "dist": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-build --icon=assets/app.icns"
     },
     "repository": "https://github.com/pashkatrick/Plumber",
     "keywords": [
@@ -20,16 +20,18 @@
         "Testing"
     ],
     "dependencies": {
+        "app-root-dir": "^1.0.2",
         "monaco-editor": "^0.17.0",
         "monaco-loader": "^1.0.0",
         "zerorpc": "^0.9.8"
     },
     "devDependencies": {
-        "electron-localshortcut": "^3.2.1",
-        "electron-squirrel-startup": "^1.0.0",        
         "electron": "^4.2.12",
+        "electron-localshortcut": "^3.2.1",
+        "electron-packager": "^15.2.0",
         "electron-rebuild": "^1.11.0",
-        "electron-reloader": "^1.1.0"
+        "electron-reloader": "^1.1.0",
+        "electron-squirrel-startup": "^1.0.0"
     },
     "build": {
         "appId": "com.pashkatrick.Plumber",
@@ -52,7 +54,7 @@
                 "nsis"
             ],
             "icon": "assets/app.ico"
-        },        
+        },
         "dmg": {},
         "nsis": {}
     }

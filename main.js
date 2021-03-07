@@ -3,29 +3,12 @@ const path = require('path')
 const fs = require('fs')
 const config = require('./config')
 const { ipcMain } = require('electron')
-
+const appRootDir = require('app-root-dir').get();
+const python_server = appRootDir + '/bin/app';
 
 let pythonProcess = null
 let pythonPort = null
 
-
-function getPythonServerPath() {
-  if (!guessPackaged()) {
-    python_server_path = path.join(__dirname, config.PYTHON_SERVER_DIR, config.PYTHON_SERVER + '.py')
-    python_server_path = path.join(config.PYTHON_SERVER_DIR, config.PYTHON_SERVER + '.py')
-  } else {
-    if (process.platform === 'win32') {
-      python_server_path = path.join(__dirname, config.PYTHON_DIST_DIR, config.PYTHON_SERVER + '.exe')
-    } else {
-      python_server_path = path.join(__dirname, config.PYTHON_DIST_DIR, config.PYTHON_SERVER)
-    }
-  }
-  if (config.DEBUG) {
-    console.log("Guess packaged() returned: " + guessPackaged())
-    console.log("Python server path: " + python_server_path)
-  }
-  return python_server_path
-}
 
 function selectPort() {
   pythonPort = config.ZERORPC_PORT
@@ -34,7 +17,7 @@ function selectPort() {
 
 
 function guessPackaged() {
-  fullPath = path.join(__dirname, config.PYTHON_DIST_DIR)
+  fullPath = python_server
   if (config.DEBUG) {
     console.log("Guess packaged path: " + fullPath)
   }
@@ -42,7 +25,7 @@ function guessPackaged() {
 }
 
 function createPythonProcess() {
-  let pythonScriptPath = getPythonServerPath()
+  let pythonScriptPath = python_server
   let port = '' + selectPort()
 
   if (guessPackaged()) {
@@ -325,6 +308,6 @@ app.on('browser-window-focus', function () {
 })
 
 // Hot Reload
-// try {
-//   require('electron-reloader')(module)
-// } catch (_) { }
+try {
+  require('electron-reloader')(module)
+} catch (_) { }
