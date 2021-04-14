@@ -1,6 +1,0 @@
-pre-commit==2.9.3
-python-decouple==3.3
-pony==0.7.14
-zerorpc==0.6.3
-pyinstaller==4.1
-pyinstaller-hooks-contrib==2020.11

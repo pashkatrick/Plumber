@@ -32,30 +32,5 @@
         "electron-rebuild": "^1.11.0",
         "electron-reloader": "^1.1.0",
         "electron-squirrel-startup": "^1.0.0"
-    },
-    "build": {
-        "appId": "com.pashkatrick.Plumber",
-        "productName": "Plumber",
-        "copyright": "Copyright © since 2020, pashkatrick",
-        "asar": false,
-        "directories": {
-            "output": "release-build"
-        },
-        "mac": {
-            "target": [
-                "dmg"
-            ],
-            "category": "public.app-category.developer-tools",
-            "icon": "assets/app.icns",
-            "bundleVersion": "beta"
-        },
-        "win": {
-            "target": [
-                "nsis"
-            ],
-            "icon": "assets/app.ico"
-        },
-        "dmg": {},
-        "nsis": {}
     }
 }

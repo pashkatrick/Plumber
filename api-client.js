@@ -1,14 +1,11 @@
 const zerorpc = require('zerorpc')
 const config = require('./config')
-const appRootDir = require('app-root-dir').get();
-const GRPC = appRootDir + '/bin/grpcurl';
 
 // Create zerorpc client
 let client = new zerorpc.Client()
 
 // Connect to the zerorpc server which is run in python
-client.connect("tcp://" + config.ZERORPC_HOST
-    + ":" + config.ZERORPC_PORT)
+client.connect("tcp://" + config.ZERORPC_HOST + ":" + config.ZERORPC_PORT)
 
 const API = {
     test: (callback) => {
@@ -43,9 +40,7 @@ const API = {
         })
     },
     method_list: (host, callback) => {
-        // TODO: убрать после тестов
-        console.log(GRPC)
-        client.invoke("method_list_handler", host, GRPC, (error, result) => {
+        client.invoke("method_list_handler", host, (error, result) => {
             if (error) {
                 console.log(error)
                 return null
@@ -115,8 +110,8 @@ const API = {
             }
         })
     },
-    export_collections: (path, callback) => {
-        client.invoke("export_handler", path, (error, result) => {
+    export_collections: (callback) => {
+        client.invoke("export_handler", (error, result) => {
             if (error) {
                 console.log(error)
                 return null

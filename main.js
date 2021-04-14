@@ -1,67 +1,6 @@
 const { app, BrowserWindow, globalShortcut, Menu } = require('electron')
 const path = require('path')
-const fs = require('fs')
 const config = require('./config')
-const { ipcMain } = require('electron')
-const appRootDir = require('app-root-dir').get();
-const python_server = appRootDir + '/bin/app';
-
-let pythonProcess = null
-let pythonPort = null
-
-
-function selectPort() {
-  pythonPort = config.ZERORPC_PORT
-  return pythonPort
-}
-
-
-function guessPackaged() {
-  fullPath = python_server
-  if (config.DEBUG) {
-    console.log("Guess packaged path: " + fullPath)
-  }
-  return fs.existsSync(fullPath)
-}
-
-function createPythonProcess() {
-  let pythonScriptPath = python_server
-  let port = '' + selectPort()
-
-  if (guessPackaged()) {
-    pythonProcess = require('child_process').execFile(pythonScriptPath, [port])
-  } else {
-    pythonProcess = require('child_process').spawn('python', [pythonScriptPath, port])
-  }
-
-  pythonProcess.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`)
-  })
-
-  pythonProcess.stderr.on('data', (data) => {
-    console.log(`stderr: ${data}`)
-  })
-
-  pythonProcess.on('close', (code) => {
-    console.log(`child process exited with code ${code}`)
-  })
-
-  return pythonProcess
-}
-
-function closePythonProcess() {
-  pythonProcess.kill()
-  pythonProcess = null
-  pythonPort = null
-}
-
-ipcMain.on('python-server', (event, arg) => {
-  createPythonProcess().addListener('close', () => {
-    event.sender.send('python-server-reply')
-  })
-})
-
-app.on('will-quit', closePythonProcess)
 
 let mainWindow
 

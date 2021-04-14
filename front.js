@@ -3,6 +3,7 @@ const { ipcRenderer } = require('electron');
 const remote = require("electron").remote;
 const dialog = remote.dialog;
 const monaco = require('monaco-loader');
+const fs = require('fs');
 let loader = document.querySelector('#loader')
 let newTab = document.querySelector('#new')
 let tabs = document.querySelector('#mainTabs')
@@ -28,21 +29,10 @@ var editorConfig = {
 }
 monaco().then(monaco => {
     monaccco = monaco
-})
-
-ipcRenderer.send('python-server')
-ipcRenderer.on('python-server-reply', (event, arg) => {
-    loadColections();
-    monacoInit('tab-0')
-    initObject = {}
-    initObject.tab_id = 0
-    initObject.saved = document.querySelector('.tab-pane.fade.show.active').getAttribute('saved')
-    initObject.tab_host = document.querySelector('#tab-0 #host')
-    initObject.tab_method = document.querySelector('#tab-0 #methods')
-    initObject.tab_request = editorsList.find(e => e.editor_id === 'tab-0').editor_req // - да, у реквеста берем value
-    initObject.tab_response = editorsList.find(e => e.editor_id === 'tab-0').editor_resp
-    setCurrentTab(initObject)
-    loader.style.display = 'none';
+    API.test((result) => {
+        console.log(result)
+    })
+    init_client()
 })
 
 ipcRenderer.on('tab-shut-down', (event, arg) => {
@@ -521,8 +511,15 @@ function showWarning(msg) {
     }, 3500);
 }
 
-function exportCollections(path) {
-    API.export_collections(path, (result) => {
+function exportCollections(path) { 
+    API.export_collections((result) => {
+        console.log(result)
+        fs.writeFile(path, JSON.stringify(result, undefined, 4), function(err) {
+            if(err) {
+                return console.log(err);
+            }
+            console.log("The file was saved!");
+        });    
         _obj = getCurrentTab()
         showSuccess(_obj)
     })
@@ -536,4 +533,20 @@ function importCollections(path) {
         console.log(result)
     })
     loadColections()
+}
+
+
+function init_client() {
+    loader.style.display = 'none';
+    loadColections();
+    monacoInit('tab-0')
+    initObject = {}
+    initObject.tab_id = 0
+    initObject.saved = document.querySelector('.tab-pane.fade.show.active').getAttribute('saved')
+    initObject.tab_host = document.querySelector('#tab-0 #host')
+    initObject.tab_method = document.querySelector('#tab-0 #methods')
+    initObject.tab_request = editorsList.find(e => e.editor_id === 'tab-0').editor_req // - да, у реквеста берем value
+    initObject.tab_response = editorsList.find(e => e.editor_id === 'tab-0').editor_resp
+    setCurrentTab(initObject)
+    loader.style.display = 'none';
 }
