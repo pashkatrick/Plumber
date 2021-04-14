@@ -511,15 +511,15 @@ function showWarning(msg) {
     }, 3500);
 }
 
-function exportCollections(path) { 
+function exportCollections(path) {
     API.export_collections((result) => {
         console.log(result)
-        fs.writeFile(path, JSON.stringify(result, undefined, 4), function(err) {
-            if(err) {
+        fs.writeFile(path, JSON.stringify(result, undefined, 4), function (err) {
+            if (err) {
                 return console.log(err);
             }
             console.log("The file was saved!");
-        });    
+        });
         _obj = getCurrentTab()
         showSuccess(_obj)
     })
