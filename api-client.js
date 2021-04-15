@@ -120,8 +120,8 @@ const API = {
             }
         })
     },
-    import_collections: (path, callback) => {
-        client.invoke("import_handler", path, (error, result) => {
+    import_collections: (collections, callback) => {
+        client.invoke("import_handler", collections, (error, result) => {
             if (error) {
                 console.log(error)
                 return null

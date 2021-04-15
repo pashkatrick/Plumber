@@ -526,13 +526,15 @@ function exportCollections(path) {
 }
 
 function importCollections(path) {
-    console.log(path[0])
-    API.import_collections(path[0], (result) => {
-        _obj = getCurrentTab()
-        showSuccess(_obj)
-        console.log(result)
-    })
-    loadColections()
+    fs.readFile(path[0], (err, data) => {
+        if (err) throw err;
+        API.import_collections(JSON.parse(data), (result) => {
+            _obj = getCurrentTab()
+            showSuccess(_obj)
+            console.log(result)
+        })
+        loadColections()
+    });
 }
 
 
