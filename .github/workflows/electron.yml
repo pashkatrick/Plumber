@@ -6,17 +6,17 @@ on:
     branches:
       - bleeding-edge
   pull_request:
-    branches: 
+    branches:
       - main
 
 jobs:
   build_on_mac:
     runs-on: macOS-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@main
         with:
           ref: electron
-      - uses: actions/setup-node@master
+      - uses: actions/setup-node@main
         with:
           node-version: 10.16
       - name: see directory
