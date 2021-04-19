@@ -1,84 +1,6 @@
 const { app, BrowserWindow, globalShortcut, Menu } = require('electron')
 const path = require('path')
-const fs = require('fs')
 const config = require('./config')
-const { ipcMain } = require('electron')
-
-
-let pythonProcess = null
-let pythonPort = null
-
-
-function getPythonServerPath() {
-  if (!guessPackaged()) {
-    python_server_path = path.join(__dirname, config.PYTHON_SERVER_DIR, config.PYTHON_SERVER + '.py')
-    python_server_path = path.join(config.PYTHON_SERVER_DIR, config.PYTHON_SERVER + '.py')
-  } else {
-    if (process.platform === 'win32') {
-      python_server_path = path.join(__dirname, config.PYTHON_DIST_DIR, config.PYTHON_SERVER + '.exe')
-    } else {
-      python_server_path = path.join(__dirname, config.PYTHON_DIST_DIR, config.PYTHON_SERVER)
-    }
-  }
-  if (config.DEBUG) {
-    console.log("Guess packaged() returned: " + guessPackaged())
-    console.log("Python server path: " + python_server_path)
-  }
-  return python_server_path
-}
-
-function selectPort() {
-  pythonPort = config.ZERORPC_PORT
-  return pythonPort
-}
-
-
-function guessPackaged() {
-  fullPath = path.join(__dirname, config.PYTHON_DIST_DIR)
-  if (config.DEBUG) {
-    console.log("Guess packaged path: " + fullPath)
-  }
-  return fs.existsSync(fullPath)
-}
-
-function createPythonProcess() {
-  let pythonScriptPath = getPythonServerPath()
-  let port = '' + selectPort()
-
-  if (guessPackaged()) {
-    pythonProcess = require('child_process').execFile(pythonScriptPath, [port])
-  } else {
-    pythonProcess = require('child_process').spawn('python', [pythonScriptPath, port])
-  }
-
-  pythonProcess.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`)
-  })
-
-  pythonProcess.stderr.on('data', (data) => {
-    console.log(`stderr: ${data}`)
-  })
-
-  pythonProcess.on('close', (code) => {
-    console.log(`child process exited with code ${code}`)
-  })
-
-  return pythonProcess
-}
-
-function closePythonProcess() {
-  pythonProcess.kill()
-  pythonProcess = null
-  pythonPort = null
-}
-
-ipcMain.on('python-server', (event, arg) => {
-  createPythonProcess().addListener('close', () => {
-    event.sender.send('python-server-reply')
-  })
-})
-
-app.on('will-quit', closePythonProcess)
 
 let mainWindow
 
@@ -325,6 +247,6 @@ app.on('browser-window-focus', function () {
 })
 
 // Hot Reload
-// try {
-//   require('electron-reloader')(module)
-// } catch (_) { }
+try {
+  require('electron-reloader')(module)
+} catch (_) { }

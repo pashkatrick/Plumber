@@ -2,11 +2,10 @@ const zerorpc = require('zerorpc')
 const config = require('./config')
 
 // Create zerorpc client
-let client = new zerorpc.Client()
+let client = new zerorpc.Client({ timeout: 1000, heartbeatInterval: 1000 })
 
 // Connect to the zerorpc server which is run in python
-client.connect("tcp://" + config.ZERORPC_HOST
-    + ":" + config.ZERORPC_PORT)
+client.connect("tcp://" + config.ZERORPC_HOST + ":" + config.ZERORPC_PORT)
 
 const API = {
     test: (callback) => {
@@ -103,6 +102,26 @@ const API = {
     },
     update_collection: (object, callback) => {
         client.invoke("update_collection_handler", object, (error, result) => {
+            if (error) {
+                console.log(error)
+                return null
+            } else {
+                callback(result)
+            }
+        })
+    },
+    export_collections: (callback) => {
+        client.invoke("export_handler", (error, result) => {
+            if (error) {
+                console.log(error)
+                return null
+            } else {
+                callback(result)
+            }
+        })
+    },
+    import_collections: (collections, callback) => {
+        client.invoke("import_handler", collections, (error, result) => {
             if (error) {
                 console.log(error)
                 return null

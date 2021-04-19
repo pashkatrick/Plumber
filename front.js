@@ -1,6 +1,9 @@
 const API = require("./api-client").API
 const { ipcRenderer } = require('electron');
+const remote = require("electron").remote;
+const dialog = remote.dialog;
 const monaco = require('monaco-loader');
+const fs = require('fs');
 let loader = document.querySelector('#loader')
 let newTab = document.querySelector('#new')
 let tabs = document.querySelector('#mainTabs')
@@ -24,24 +27,23 @@ var editorConfig = {
         horizontalScrollbarSize: 0,
     }
 }
-monaco().then(monaco => {
-    monaccco = monaco
-})
 
-ipcRenderer.send('python-server')
-ipcRenderer.on('python-server-reply', (event, arg) => {
-    loadColections();
-    monacoInit('tab-0')
-    initObject = {}
-    initObject.tab_id = 0
-    initObject.saved = document.querySelector('.tab-pane.fade.show.active').getAttribute('saved')
-    initObject.tab_host = document.querySelector('#tab-0 #host')
-    initObject.tab_method = document.querySelector('#tab-0 #methods')
-    initObject.tab_request = editorsList.find(e => e.editor_id === 'tab-0').editor_req // - да, у реквеста берем value
-    initObject.tab_response = editorsList.find(e => e.editor_id === 'tab-0').editor_resp
-    setCurrentTab(initObject)
+// INIT
+try {
+    API.test((result), () => {
+        console.log('res' + result)
+        if (result) {
+            monaco().then(monaco => {
+                monaccco = monaco
+                init_client()
+            })   
+        }
+    })
+} catch (e) {
     loader.style.display = 'none';
-})
+    document.querySelector('#dockerless').style.display = 'block'
+}
+
 
 ipcRenderer.on('tab-shut-down', (event, arg) => {
     closeCurrentTab()
@@ -128,6 +130,15 @@ document.addEventListener('click', function (e) {
             showWarning('Complete form fields first')
         }
         closeModal()
+    } else if (isOnId(e.path, 'export')) {
+        var export_path = dialog.showOpenDialog(remote.getCurrentWindow(), { properties: ['openDirectory'] })
+        exportCollections(export_path + '/plumber-export.json')
+    } else if (isOnId(e.path, 'import')) {
+        var import_file = dialog.showOpenDialog(remote.getCurrentWindow(), {
+            properties: ['openFile'],
+            filters: [{ name: "All Files", extensions: ["json"] }]
+        })
+        importCollections(import_file)
     }
 });
 
@@ -231,7 +242,6 @@ function openModal() {
 function closeModal() {
     document.querySelector('#collectionModal').style.display = 'none'
     document.querySelector('#collection-name').innerHTML = ''
-    // document.querySelector('#collections').innerHTML = ''
     document.querySelector('#item-name').innerHTML = ''
 }
 
@@ -264,12 +274,13 @@ function elementFromHTML(htmlString) {
     return div.firstChild;
 }
 
-function addNewTab(tab_id = 0, tabName = 'Untitled ') {
+function addNewTab(tab_id = 0, tabName = 'Unsaved') {
     document.querySelector('a.nav-link.active').classList.remove('active')
     document.querySelector('.tab-pane.fade.show.active').classList.remove('show', 'active')
     if (tab_id == 0) { //если ничего не передали - возвращаем новую
         var num = getRandomInt(100)
-        _generateTab(num, false, tabName + num)
+        _generateTab(num, false, tabName)
+
     } else if (document.querySelector('#tab-' + tab_id)) { //если передали существующую, открываем ее
         var el = document.querySelector('a[href="#tab-' + tab_id + '"]');
         el.classList.add('active')
@@ -288,7 +299,7 @@ function _generateTab(id, saved, tabName) {
             <nav class="navbar navbar-expand navbar-light topbar static-top bb">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item mx-2">
-                        <input type="text" id="host" class="form-control bg-grey" placeholder="${'tab-' + id}" />
+                        <input type="text" id="host" class="form-control bg-grey" placeholder="server:82" />
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
@@ -387,12 +398,13 @@ function loadColections() {
             var items = cols[i].items
 
             // Модалка
-            var option = document.createElement("option");
-            option.value = cols[i].id
-            option.text = cols[i].collection
-            modalList.appendChild(option)
+            if (items.length > 0) {
+                var option = document.createElement("option");
+                option.value = cols[i].id
+                option.text = cols[i].collection
+                modalList.appendChild(option)
+            }
 
-            // ДЛЯ ТЕСТА, TODO: вернуть if
             if (items.length > 0) {
                 let child = '';
                 items.forEach(item => child += '<a class="collapse-item" data-id="' + item.id + '" href="#">' + item.name + '</a>');
@@ -507,4 +519,45 @@ function showWarning(msg) {
     setTimeout(() => {
         _block.style.opacity = '0'
     }, 3500);
+}
+
+function exportCollections(path) {
+    API.export_collections((result) => {
+        console.log(result)
+        fs.writeFile(path, JSON.stringify(result, undefined, 4), function (err) {
+            if (err) {
+                return console.log(err);
+            }
+            console.log("The file was saved!");
+        });
+        _obj = getCurrentTab()
+        showSuccess(_obj)
+    })
+}
+
+function importCollections(path) {
+    fs.readFile(path[0], (err, data) => {
+        if (err) throw err;
+        API.import_collections(JSON.parse(data), (result) => {
+            _obj = getCurrentTab()
+            showSuccess(_obj)
+            console.log(result)
+        })
+        loadColections()
+    });
+}
+
+
+function init_client() {
+    loader.style.display = 'none';
+    loadColections();
+    monacoInit('tab-0')
+    initObject = {}
+    initObject.tab_id = 0
+    initObject.saved = document.querySelector('.tab-pane.fade.show.active').getAttribute('saved')
+    initObject.tab_host = document.querySelector('#tab-0 #host')
+    initObject.tab_method = document.querySelector('#tab-0 #methods')
+    initObject.tab_request = editorsList.find(e => e.editor_id === 'tab-0').editor_req // - да, у реквеста берем value
+    initObject.tab_response = editorsList.find(e => e.editor_id === 'tab-0').editor_resp
+    setCurrentTab(initObject)
 }

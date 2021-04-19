@@ -10,14 +10,12 @@ db_test.py
 __pycache__/
 *.py[cod]
 *$py.class
-<<<<<<< HEAD
+node_modules
 protos/
 node_modules
 builder
 # C extensions
-=======
 node_modules
->>>>>>> 186e72f787c1e299407f50f23d7c17893e6d292f
 *.so
 *.db*
 .Python
@@ -67,6 +65,11 @@ env
 .python-version
 **/src/
 .DS_Store
+package-lock.json
+release-build
+proto_test.py
+grpcurl
+release-*
 proto_test.py
 package-lock.json
 release-build

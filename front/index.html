@@ -35,12 +35,12 @@
                     <nav class="navbar navbar-expand navbar-light bg-white topbar static-top">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
-                                <a href="#" class="btn bg-brown" disabled>
+                                <a href="#" class="btn bg-brown" id="import">
                                     <span class="text">Import</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="btn bg-earthy mx-2" disabled>
+                                <a href="#" class="btn bg-earthy mx-2" id="export">
                                     <span class="text">Export</span>
                                 </a>
                             </li>
@@ -174,10 +174,10 @@
                 </div>
                 <div class="container my-2">
                     <div class="form-submit">
-                        <a href="#" class="btn bg-orange" id="close-modal">
+                        <a href="#" class="btn bg-earthy" id="close-modal">
                             <span class="text">Close</span>
                         </a>
-                        <a href="#" class="btn bg-earthy" id="save-item">
+                        <a href="#" class="btn bg-orange" id="save-item">
                             <span class="text">Save</span>
                         </a>
                     </div>
@@ -202,6 +202,13 @@
         <div id="loader">
             <img src="vendor/loading.gif" alt="loading">
         </div>
+
+        <!-- Окно докера -->
+        <div id="dockerless">
+            <h1>Oooops...</h1>
+            <p><i>docker pull pashkatrick/plumber-api</i></p>
+        </div>        
+
         <script>
             if (typeof module === "object") {
                 window.module = module;
