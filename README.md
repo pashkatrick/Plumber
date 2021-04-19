@@ -9,7 +9,7 @@
   <a href="https://pshktrck.ru/plumber/">
     <img src="https://img.shields.io/badge/changelog-👈-green.svg" />
   </a>
-  <a href="https://t.me/plumberpc">
+  <a href="https://t.me/pashkatwit">
     <img src="https://img.shields.io/badge/telegram-🔔-green.svg" />
   </a>  
 </p>

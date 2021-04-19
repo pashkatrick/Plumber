@@ -30,18 +30,14 @@ var editorConfig = {
 
 // INIT
 try {
-    API.test((result), () => {
-        console.log('res' + result)
-        if (result) {
-            monaco().then(monaco => {
-                monaccco = monaco
-                init_client()
-            })   
-        }
+    API.test(() => {
+        monaco().then(monaco => {
+            monaccco = monaco
+            init_client()
+        })
     })
 } catch (e) {
-    loader.style.display = 'none';
-    document.querySelector('#dockerless').style.display = 'block'
+    console.log(e)
 }
 
 

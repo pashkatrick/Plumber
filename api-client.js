@@ -12,6 +12,8 @@ const API = {
         client.invoke("test", (error, result) => {
             if (error) {
                 console.log(error)
+                // docker need message
+                document.querySelector('#dockerless').style.display = 'block'
                 return null
             } else {
                 callback(result)
