@@ -2,7 +2,7 @@ const zerorpc = require('zerorpc')
 const config = require('./config')
 
 // Create zerorpc client
-let client = new zerorpc.Client()
+let client = new zerorpc.Client({ timeout: 1000, heartbeatInterval: 1000 })
 
 // Connect to the zerorpc server which is run in python
 client.connect("tcp://" + config.ZERORPC_HOST + ":" + config.ZERORPC_PORT)

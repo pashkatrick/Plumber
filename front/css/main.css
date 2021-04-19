@@ -29,6 +29,28 @@ body {
   background-color: #fff;
 }
 
+#dockerless {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  background-color: #fff;
+  background: url(../vendor/dockerscreen.png) 100% 100% no-repeat; /* Добавляем фон */
+  background-size: cover; /* Масштабируем фон */
+  border: 20px solid #046FF6;
+}  
+
+#dockerless img, h3, h1, p {
+  text-align: center;
+  width: 400px;
+  position: relative;
+  top: calc(50% - 200px);
+  left: calc(50% - 200px);
+}
+
 #loader {
   position: absolute;
   width: 100%;

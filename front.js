@@ -27,13 +27,23 @@ var editorConfig = {
         horizontalScrollbarSize: 0,
     }
 }
-monaco().then(monaco => {
-    monaccco = monaco
-    API.test((result) => {
-        console.log(result)
+
+// INIT
+try {
+    API.test((result), () => {
+        console.log('res' + result)
+        if (result) {
+            monaco().then(monaco => {
+                monaccco = monaco
+                init_client()
+            })   
+        }
     })
-    init_client()
-})
+} catch (e) {
+    loader.style.display = 'none';
+    document.querySelector('#dockerless').style.display = 'block'
+}
+
 
 ipcRenderer.on('tab-shut-down', (event, arg) => {
     closeCurrentTab()
@@ -550,5 +560,4 @@ function init_client() {
     initObject.tab_request = editorsList.find(e => e.editor_id === 'tab-0').editor_req // - да, у реквеста берем value
     initObject.tab_response = editorsList.find(e => e.editor_id === 'tab-0').editor_resp
     setCurrentTab(initObject)
-    loader.style.display = 'none';
 }

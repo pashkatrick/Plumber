@@ -3,7 +3,7 @@ CONFIGURATION CONSTANTS
 */
 
 /** Should debug output be printed? */
-let DEBUG = true
+let DEBUG = false
 
 /** Host to use for the zerorpc server */
 let ZERORPC_HOST = "0.0.0.0"
