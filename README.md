@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/client_logo.png" style="width:150px"/>
+  <img src="./assets/client_logo.png" width="150"/>
 </p>
 <h1 align="center">Plumber</h1>
 
