@@ -4,9 +4,9 @@ $(document).ready(function () {
         $(this).addClass('active');
     });
 
-    // $('#send').click(function () {
-    //     showSuccess()
-    // });
+    $('#meta').click(function () {
+        $('#metadata').toggle();
+    });
 });
 
 

@@ -88,7 +88,8 @@ document.addEventListener('click', function (e) {
         API.send_request(
             _obj.tab_host.value,
             _obj.tab_method.value,
-            _obj.tab_request.getValue(), (result) => {
+            _obj.tab_request.getValue(),
+            _obj.tab_meta.value, (result) => {
                 _obj.tab_response.setValue(JSON.stringify(result, undefined, 4))
                 showSuccess(_obj)
             })
@@ -157,6 +158,7 @@ function getCurrentTab() {
     currentTabObj.saved = document.querySelector('.tab-pane.fade.show.active').getAttribute('saved')
     currentTabObj.tab_host = document.querySelector('#' + currentTab + ' #host')
     currentTabObj.tab_method = document.querySelector('#' + currentTab + ' #methods')
+    currentTabObj.tab_meta= document.querySelector('#' + currentTab + ' #metadata')
     currentTabObj.tab_request = editorsList.find(e => e.editor_id === currentTab).editor_req
     currentTabObj.tab_response = editorsList.find(e => e.editor_id === currentTab).editor_resp
     return currentTabObj
@@ -242,7 +244,7 @@ function closeModal() {
 }
 
 function loadMethods(tab) {
-    API.method_list(tab.tab_host.value, (result) => {
+    API.method_list(tab.tab_host.value, tab.tab_meta.value, (result) => {
         var meths = result.methods
         methods = document.querySelector('#' + tab.tab_id + ' #methods')
         methods.innerHTML = ''
@@ -297,6 +299,9 @@ function _generateTab(id, saved, tabName) {
                     <li class="nav-item mx-2">
                         <input type="text" id="host" class="form-control bg-grey" placeholder="server:82" />
                     </li>
+                    <li>
+                        <a href="#" id="meta"><span class="orange">META</span></a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
@@ -305,13 +310,7 @@ function _generateTab(id, saved, tabName) {
                         </a>
                     </li>
                     <li class="nav-item mx-2">
-                        <select name="select" id="methods" class="form-control bg-grey">
-                            <!--
-                            <option value="value1">Метод 1</option>
-                            <option value="value2" selected>Метод 2</option>
-                            <option value="value3">Метод 3</option>
-                            -->
-                        </select>
+                        <select name="select" id="methods" class="form-control bg-grey"></select>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="btn bg-grey" id="save">
@@ -330,6 +329,9 @@ function _generateTab(id, saved, tabName) {
                     </li>
                 </ul>
             </nav>
+
+            <textarea name="metadata" id="metadata" rows=""cols="30" rows="5" placeholder=""></textarea>
+
             <div class="container-fluid bb">
                 <div class="row">
                     <div class="col-md-6 request">
@@ -493,7 +495,7 @@ function getRandomInt(max) {
 }
 
 function loadTemplateMessage(_obj) {
-    API.message_template(_obj.tab_host.value, _obj.tab_method.value, (result) => {
+    API.message_template(_obj.tab_host.value, _obj.tab_method.value, _obj.tab_meta.value, (result) => {
         _obj.tab_request.setValue(JSON.stringify(result, undefined, 4));
         showSuccess(_obj)
     })

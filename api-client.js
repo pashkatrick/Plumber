@@ -20,8 +20,8 @@ const API = {
             }
         })
     },
-    message_template: (host, method, callback) => {
-        client.invoke("get_message_template_handler", host, method, (error, result) => {
+    message_template: (host, method, metadata, callback) => {
+        client.invoke("get_message_template_handler", host, method, metadata, (error, result) => {
             if (error) {
                 console.log(error)
                 return null
@@ -31,8 +31,8 @@ const API = {
             }
         })
     },
-    send_request: (host, method, req, callback) => {
-        client.invoke("send_request_handler", host, method, req, (error, result) => {
+    send_request: (host, method, req, metadata, callback) => {
+        client.invoke("send_request_handler", host, method, req, metadata, (error, result) => {
             if (error) {
                 console.log(error)
                 return null
@@ -41,8 +41,8 @@ const API = {
             }
         })
     },
-    method_list: (host, callback) => {
-        client.invoke("method_list_handler", host, (error, result) => {
+    method_list: (host, metadata, callback) => {
+        client.invoke("method_list_handler", host, metadata, (error, result) => {
             if (error) {
                 console.log(error)
                 return null
@@ -51,18 +51,8 @@ const API = {
             }
         })
     },
-    service_list: (host, callback) => {
-        client.invoke("service_list_handler", host, (error, result) => {
-            if (error) {
-                console.log(error)
-                return null
-            } else {
-                callback(result)
-            }
-        })
-    },
-    view_method_scheme: (host, method, callback) => {
-        client.invoke("view_method_scheme_handler", host, method, (error, result) => {
+    view_method_scheme: (host, method, metadata, callback) => {
+        client.invoke("view_method_scheme_handler", host, method, metadata, (error, result) => {
             if (error) {
                 console.log(error)
                 return null

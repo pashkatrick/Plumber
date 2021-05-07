@@ -41,7 +41,7 @@ body {
   background: url(../vendor/dockerscreen.png) 100% 100% no-repeat; /* Добавляем фон */
   background-size: cover; /* Масштабируем фон */
   border: 20px solid #046FF6;
-}  
+}
 
 #dockerless img, h3, h1, p {
   text-align: center;
@@ -425,7 +425,7 @@ hr {
 }
 
 .navbar input {
-  width: 450px;
+  width: 350px;
 }
 
 .navbar select {
@@ -1809,3 +1809,8 @@ footer {
   transition: opacity 0.3s, transform 0.3s;
   opacity: 0;
 }
+
+/* textarea #meta {
+  color: #b58161;
+  padding: 5px 20px;
+} */
