@@ -107,7 +107,6 @@ document.addEventListener('click', function (e) {
     } else if (isOnId(e.path, 'template')) {
         var _obj = getCurrentTab()
         loadTemplateMessage(_obj)
-    } else if (isOnId(e.path, 'view')) {
     } else if (isOnId(e.path, 'close-modal')) {
         closeModal()
     } else if (isOnId(e.path, 'edit-collection')) {
@@ -136,6 +135,8 @@ document.addEventListener('click', function (e) {
             filters: [{ name: "All Files", extensions: ["json"] }]
         })
         importCollections(import_file)
+    } else if (isOnId(e.path, 'meta')) {
+        // console.log(document.querySelector(e.target.closest('#metadata')))
     }
 });
 
@@ -295,7 +296,7 @@ function _generateTab(id, saved, tabName) {
     var tabContent = elementFromHTML(`
         <div class="tab-pane fade show active" id="${'tab-' + id}" role="tabpanel" aria-labelledby="${'tab-' + id}" saved="${saved}">
             <nav class="navbar navbar-expand navbar-light topbar static-top bb">
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav mr-auto align-items-center justify-content-center">
                     <li class="nav-item mx-2">
                         <input type="text" id="host" class="form-control bg-grey" placeholder="server:82" />
                     </li>
@@ -377,11 +378,13 @@ function _generateTab(id, saved, tabName) {
 function closeCurrentTab() {
     var active = document.querySelector('.nav-tabs a.nav-link.active')
     var activeContent = document.querySelector('.tab-pane.fade.show.active')
-    editorsList.find(ed => ed.editor_id === activeContent.getAttribute('id')).remove
-    active.parentNode.remove()
-    activeContent.remove()
-    document.querySelector('.nav-tabs li:nth-last-child(2) a.nav-link').classList.add('active')
-    document.querySelector('.tab-pane.fade:last-child').classList.add('show', 'active')
+    if (active != document.querySelector('#tab-home')) {
+        editorsList.find(ed => ed.editor_id === activeContent.getAttribute('id')).remove
+        active.parentNode.remove()
+        activeContent.remove()
+        document.querySelector('.nav-tabs li:nth-last-child(2) a.nav-link').classList.add('active')
+        document.querySelector('.tab-pane.fade:last-child').classList.add('show', 'active')
+    }
 }
 
 function loadColections() {
