@@ -439,6 +439,10 @@ function loadColections() {
                         </div>
                     </li>
                     `
+                var options = {
+                    valueNames: [ 'collectionName' ]
+                };
+                var filterList = new List('filter-list', options);
             }
         }
         let queryItems = document.querySelectorAll('.collapse-item')

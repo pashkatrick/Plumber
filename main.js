@@ -21,9 +21,9 @@ function hotkeysInit() {
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1200,
+    width: 1300,
     height: 800,
-    minWidth: 1200,
+    minWidth: 1300,
     minHeight: 800,
     webPreferences: {
       nodeIntegration: true,

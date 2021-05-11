@@ -16,24 +16,29 @@
 
 <body id="page-top">
     <div id="wrapper">
-        <ul class="navbar-nav bg-white sidebar sidebar-dark accordion" id="accordionSidebar">
-            <div class="sidebar-brand d-flex align-items-center justify-content-center">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="🔍&nbsp;&nbsp;Filter" disabled />
-                </div>
-            </div>
 
-            <div class="sidebar-heading black">
-                Collections
-            </div>
-            <hr class="divider my-2" />
-            <a href="#" id="mySizeChart">
-                <div class="sidebar-heading orange">
-                    + Create
+        <div id="filter-list">
+            <div class="sidebar">
+                <div class="sidebar-brand d-flex align-items-center justify-content-center">
+                    <div class="input-group">
+                        <input type="text" class="search form-control" placeholder="🔍&nbsp;&nbsp;Filter" />
+                    </div>
+                </div>   
+                <div class="sidebar-heading black">
+                    Collections
                 </div>
-            </a>
-            <br />
-        </ul>
+                <hr class="divider my-2" />
+                <a href="#">
+                    <div class="sidebar-heading orange">
+                        + Create
+                    </div>
+                </a>
+                <br />                      
+            </div>       
+            <ul class="list navbar-nav bg-white sidebar sidebar-dark accordion" id="accordionSidebar"></ul>                 
+        </div>
+
+
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top">
@@ -230,6 +235,7 @@
         }
     </script>
     <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/list.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/custom.js"></script>
     <script>
