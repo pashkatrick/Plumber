@@ -1,6 +1,7 @@
 const API = require("./api-client").API
-const { ipcRenderer } = require('electron');
-const remote = require("electron").remote;
+const { ipcRenderer, remote, shell } = require('electron');
+// const shell = require("electron").shell;
+// const remote = require("electron").remote;
 const dialog = remote.dialog;
 const monaco = require('monaco-loader');
 const fs = require('fs');
@@ -137,6 +138,14 @@ document.addEventListener('click', function (e) {
         importCollections(import_file)
     } else if (isOnId(e.path, 'meta')) {
         // console.log(document.querySelector(e.target.closest('#metadata')))
+    } else if (isOnId(e.path, 'support')) {
+        shell.openExternal("tg://resolve?domain=pashkatrick")
+    } else if (isOnId(e.path, 'newsletter')) {
+        shell.openExternal("https://pshktrck.ru/plumber/")
+    } else if (isOnId(e.path, 'issue')) {
+        shell.openExternal("https://github.com/pashkatrick/Plumber/issues")
+    } else if (isOnId(e.path, 'donate')) {
+        shell.openExternal("https://www.buymeacoffee.com/pashkatrick")
     }
 });
 
@@ -306,7 +315,7 @@ function _generateTab(id, saved, tabName) {
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a href="#" class="btn bg-grey" id="refresh">
+                        <a class="btn bg-grey" id="refresh">
                             <span class="emoji">🔄</span>
                         </a>
                     </li>
@@ -314,17 +323,17 @@ function _generateTab(id, saved, tabName) {
                         <select name="select" id="methods" class="form-control bg-grey"></select>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="btn bg-grey" id="save">
+                        <a class="btn bg-grey" id="save">
                             <span class="emoji">💾</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="btn bg-grey mx-2" id="template">
+                        <a class="btn bg-grey mx-2" id="template">
                             <span class="emoji">📄</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="btn bg-grey" id="trash">
+                        <a class="btn bg-grey" id="trash">
                             <span class="emoji">🗑️</span>
                         </a>
                     </li>
@@ -408,26 +417,26 @@ function loadColections() {
 
             if (items.length > 0) {
                 let child = '';
-                items.forEach(item => child += '<a class="collapse-item" data-id="' + item.id + '" href="#">' + item.name + '</a>');
+                items.forEach(item => child += '<a class="collapse-item" data-id="' + item.id + '">' + item.name + '</a>');
                 var identic = 'identic_' + cols[i].id;
                 sidebar.innerHTML += `
                     <li class="nav-item">
                         <div class="collection" data-id=${cols[i].id}>
-                            <a class="nav-link collapsed" href="#" data-id=${cols[i].id} data-toggle="collapse" data-target="#${identic}" aria-expanded="false" aria-controls="${identic}">
+                            <a href="#" class="nav-link collapsed" data-id=${cols[i].id} data-toggle="collapse" data-target="#${identic}" aria-expanded="false" aria-controls="${identic}">
                                 <i class="far fa-folder"></i>
                                 <span class="orange items-count"> -${items.length}- </span><span class="collectionName">${cols[i].collection}</span>
                             </a>
-                            <a href="#" class="col-settings" data-settings="${identic}-set"  data-toggle="collapse" data-target="#${identic}-set" aria-expanded="true" aria-controls="${identic}-set">...</a>
+                            <a class="col-settings" data-settings="${identic}-set"  data-toggle="collapse" data-target="#${identic}-set" aria-expanded="true" aria-controls="${identic}-set">...</a>
                             <div class="settings-block bt collapse" id="${identic}-set">
                                 <ul>
                                     <li>
-                                        <a href="#" id="share-collection" disabled>📢</a>
+                                        <a id="share-collection" disabled>📢</a>
                                     </li>
                                     <li>
-                                        <a href="#" id="edit-collection">✍🏽</a>
+                                        <a id="edit-collection">✍🏽</a>
                                     </li>
                                     <li>
-                                        <a href="#" id="remove-collection">🗑️</a>
+                                        <a id="remove-collection">🗑️</a>
                                     </li>
                                 </ul>
                             </div>

@@ -23,19 +23,19 @@
                     <div class="input-group">
                         <input type="text" class="search form-control" placeholder="🔍&nbsp;&nbsp;Filter" />
                     </div>
-                </div>   
+                </div>
                 <div class="sidebar-heading black">
                     Collections
                 </div>
                 <hr class="divider my-2" />
-                <a href="#">
+                <a>
                     <div class="sidebar-heading orange">
                         + Create
                     </div>
                 </a>
-                <br />                      
-            </div>       
-            <ul class="list navbar-nav bg-white sidebar sidebar-dark accordion" id="accordionSidebar"></ul>                 
+                <br />
+            </div>
+            <ul class="list navbar-nav bg-white sidebar sidebar-dark accordion" id="accordionSidebar"></ul>
         </div>
 
 
@@ -44,12 +44,12 @@
                 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a href="#" class="btn bg-brown" id="import">
+                            <a class="btn bg-brown" id="import">
                                 <span class="text">Import</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="btn bg-earthy mx-2" id="export">
+                            <a class="btn bg-earthy mx-2" id="export">
                                 <span class="text">Export</span>
                             </a>
                         </li>
@@ -61,27 +61,32 @@
                             </select>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="btn bg-grey" disabled>
+                            <a class="btn bg-grey" disabled>
                                 <span class="emoji">⚙</span>
                             </a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a href="tg://resolve?domain=pashkatrick" class="btn bg-orange">
+                            <a class="btn bg-orange mx-2" id="support">
                                 <span class="text">Support</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="https://pshktrck.ru/plumber/" class="btn bg-grey mx-2">
+                            <a class="btn bg-grey" id="newsletter">
                                 <span class="text">📬</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="https://github.com/pashkatrick/Plumber/issues" class="btn bg-grey">
+                            <a class="btn bg-grey mx-2" id="issue">
                                 <span class="text">🐛</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="btn bg-grey" id="donate">
+                                <span class="text">☕</span>
+                            </a>
+                        </li>                        
                     </ul>
                 </nav>
 
@@ -91,7 +96,7 @@
                             aria-controls="home" aria-selected="true">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a id="new" class="nav-link" href="#">➕</a>
+                        <a href="#" id="new" class="nav-link">➕</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -100,7 +105,7 @@
                         <nav class="navbar navbar-expand navbar-light topbar static-top bb">
                             <ul class="navbar-nav mr-auto align-items-center justify-content-center">
                                 <li class="nav-item mx-2">
-                                    <input type="text" id="host" class="form-control bg-grey" placeholder="tab-0" />
+                                    <input type="text" id="host" class="form-control bg-grey" placeholder="server:82" />
                                 </li>
                                 <li>
                                     <a href="#" id="meta"><span class="orange">META</span></a>
@@ -108,7 +113,7 @@
                             </ul>
                             <ul class="navbar-nav ml-auto">
                                 <li class="nav-item">
-                                    <a href="#" class="btn bg-grey" id="refresh">
+                                    <a class="btn bg-grey" id="refresh">
                                         <span class="emoji">🔄</span>
                                     </a>
                                 </li>
@@ -116,17 +121,17 @@
                                     <select name="select" id="methods" class="form-control bg-grey"></select>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="btn bg-grey" id="template">
+                                    <a class="btn bg-grey" id="template">
                                         <span class="emoji">📄</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="btn bg-grey mx-2" id="save">
+                                    <a class="btn bg-grey mx-2" id="save">
                                         <span class="emoji">💾</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="btn bg-grey" id="trash">
+                                    <a class="btn bg-grey" id="trash">
                                         <span class="emoji">🗑️</span>
                                     </a>
                                 </li>
@@ -193,10 +198,10 @@
             </div>
             <div class="container my-2">
                 <div class="form-submit">
-                    <a href="#" class="btn bg-earthy" id="close-modal">
+                    <a class="btn bg-earthy" id="close-modal">
                         <span class="text">Close</span>
                     </a>
-                    <a href="#" class="btn bg-orange" id="save-item">
+                    <a class="btn bg-orange" id="save-item">
                         <span class="text">Save</span>
                     </a>
                 </div>
