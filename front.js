@@ -1,6 +1,5 @@
 const API = require("./api-client").API
-const { ipcRenderer } = require('electron');
-const remote = require("electron").remote;
+const { ipcRenderer, remote, shell } = require('electron');
 const dialog = remote.dialog;
 const monaco = require('monaco-loader');
 const fs = require('fs');
@@ -75,6 +74,7 @@ document.addEventListener('click', function (e) {
                 host: _obj.tab_host.value,
                 method: _obj.tab_method.value,
                 request_body: _obj.tab_request.getValue(),
+                metadata: _obj.tab_meta.value,
                 collection_id: document.querySelector('#accordionSidebar a.nav-link:not(.collapsed)').getAttribute('data-id')
             }
             API.update_item(JSON.stringify(object), () => {
@@ -85,10 +85,14 @@ document.addEventListener('click', function (e) {
         }
     } else if (isOnId(e.path, 'send')) {
         var _obj = getCurrentTab()
+
+        console.log(_obj.tab_meta.value)
+
         API.send_request(
             _obj.tab_host.value,
             _obj.tab_method.value,
-            _obj.tab_request.getValue(), (result) => {
+            _obj.tab_request.getValue(),
+            _obj.tab_meta.value, (result) => {
                 _obj.tab_response.setValue(JSON.stringify(result, undefined, 4))
                 showSuccess(_obj)
             })
@@ -106,7 +110,6 @@ document.addEventListener('click', function (e) {
     } else if (isOnId(e.path, 'template')) {
         var _obj = getCurrentTab()
         loadTemplateMessage(_obj)
-    } else if (isOnId(e.path, 'view')) {
     } else if (isOnId(e.path, 'close-modal')) {
         closeModal()
     } else if (isOnId(e.path, 'edit-collection')) {
@@ -135,6 +138,17 @@ document.addEventListener('click', function (e) {
             filters: [{ name: "All Files", extensions: ["json"] }]
         })
         importCollections(import_file)
+    } else if (isOnId(e.path, 'meta')) {
+        var _obj = getCurrentTab()
+        _obj.tab_meta.style.display = (_obj.tab_meta.style.display == 'block') ? 'none' : 'block'
+    } else if (isOnId(e.path, 'support')) {
+        shell.openExternal("tg://resolve?domain=pashkatrick")
+    } else if (isOnId(e.path, 'newsletter')) {
+        shell.openExternal("https://pshktrck.ru/plumber/")
+    } else if (isOnId(e.path, 'issue')) {
+        shell.openExternal("https://github.com/pashkatrick/Plumber/issues")
+    } else if (isOnId(e.path, 'donate')) {
+        shell.openExternal("https://www.buymeacoffee.com/pashkatrick")
     }
 });
 
@@ -157,6 +171,7 @@ function getCurrentTab() {
     currentTabObj.saved = document.querySelector('.tab-pane.fade.show.active').getAttribute('saved')
     currentTabObj.tab_host = document.querySelector('#' + currentTab + ' #host')
     currentTabObj.tab_method = document.querySelector('#' + currentTab + ' #methods')
+    currentTabObj.tab_meta= document.querySelector('#' + currentTab + ' #metadata')
     currentTabObj.tab_request = editorsList.find(e => e.editor_id === currentTab).editor_req
     currentTabObj.tab_response = editorsList.find(e => e.editor_id === currentTab).editor_resp
     return currentTabObj
@@ -204,6 +219,7 @@ function addItem(itemName, colId) {
         host: tab.tab_host.value,
         method: tab.tab_method.value,
         request_body: tab.tab_request.getValue(),
+        metadata: tab.tab_meta.value,
         collection_id: colId
     }
     API.add_item(JSON.stringify(itemObj), () => {
@@ -223,6 +239,7 @@ function getItem(_id, tabTitle) {
     API.get_item(_id, (result) => {
         tabObj.tab_host.value = result.host
         tabObj.tab_request.setValue(result.request)
+        tabObj.tab_meta.value = result.metadata
         var option = document.createElement("option");
         option.value = result.method;
         option.text = result.method.split(/[.]+/).pop();
@@ -242,7 +259,7 @@ function closeModal() {
 }
 
 function loadMethods(tab) {
-    API.method_list(tab.tab_host.value, (result) => {
+    API.method_list(tab.tab_host.value, tab.tab_meta.value, (result) => {
         var meths = result.methods
         methods = document.querySelector('#' + tab.tab_id + ' #methods')
         methods.innerHTML = ''
@@ -274,7 +291,7 @@ function addNewTab(tab_id = 0, tabName = 'Unsaved') {
     document.querySelector('a.nav-link.active').classList.remove('active')
     document.querySelector('.tab-pane.fade.show.active').classList.remove('show', 'active')
     if (tab_id == 0) { //если ничего не передали - возвращаем новую
-        var num = getRandomInt(100)
+        var num = getRandomInt(1000)
         _generateTab(num, false, tabName)
 
     } else if (document.querySelector('#tab-' + tab_id)) { //если передали существующую, открываем ее
@@ -293,43 +310,43 @@ function _generateTab(id, saved, tabName) {
     var tabContent = elementFromHTML(`
         <div class="tab-pane fade show active" id="${'tab-' + id}" role="tabpanel" aria-labelledby="${'tab-' + id}" saved="${saved}">
             <nav class="navbar navbar-expand navbar-light topbar static-top bb">
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav mr-auto align-items-center justify-content-center">
                     <li class="nav-item mx-2">
                         <input type="text" id="host" class="form-control bg-grey" placeholder="server:82" />
+                    </li>
+                    <li>
+                        <a href="#" id="meta"><span class="orange">META</span></a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a href="#" class="btn bg-grey" id="refresh">
+                        <a class="btn bg-grey" id="refresh">
                             <span class="emoji">🔄</span>
                         </a>
                     </li>
                     <li class="nav-item mx-2">
-                        <select name="select" id="methods" class="form-control bg-grey">
-                            <!--
-                            <option value="value1">Метод 1</option>
-                            <option value="value2" selected>Метод 2</option>
-                            <option value="value3">Метод 3</option>
-                            -->
-                        </select>
+                        <select name="select" id="methods" class="form-control bg-grey"></select>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="btn bg-grey" id="save">
+                        <a class="btn bg-grey" id="save">
                             <span class="emoji">💾</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="btn bg-grey mx-2" id="template">
+                        <a class="btn bg-grey mx-2" id="template">
                             <span class="emoji">📄</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="btn bg-grey" id="trash">
+                        <a class="btn bg-grey" id="trash">
                             <span class="emoji">🗑️</span>
                         </a>
                     </li>
                 </ul>
             </nav>
+
+            <textarea name="metadata" id="metadata" rows=""cols="30" rows="5" placeholder=""></textarea>
+
             <div class="container-fluid bb">
                 <div class="row">
                     <div class="col-md-6 request">
@@ -368,6 +385,7 @@ function _generateTab(id, saved, tabName) {
     currentTabObj.tab_host = document.querySelector('#tab-' + id + ' #host')
     currentTabObj.tab_method = document.querySelector('#tab-' + id + ' #methods')
     currentTabObj.tab_request = document.querySelector('#tab-' + id + ' #request')
+    currentTabObj.tab_meta = document.querySelector('#tab-' + id + ' #metadata')    
     currentTabObj.tab_response = document.querySelector('#tab-' + id + ' #response')
     setCurrentTab(currentTabObj)
 }
@@ -375,11 +393,13 @@ function _generateTab(id, saved, tabName) {
 function closeCurrentTab() {
     var active = document.querySelector('.nav-tabs a.nav-link.active')
     var activeContent = document.querySelector('.tab-pane.fade.show.active')
-    editorsList.find(ed => ed.editor_id === activeContent.getAttribute('id')).remove
-    active.parentNode.remove()
-    activeContent.remove()
-    document.querySelector('.nav-tabs li:nth-last-child(2) a.nav-link').classList.add('active')
-    document.querySelector('.tab-pane.fade:last-child').classList.add('show', 'active')
+    if (active != document.querySelector('#tab-home')) {
+        editorsList.find(ed => ed.editor_id === activeContent.getAttribute('id')).remove
+        active.parentNode.remove()
+        activeContent.remove()
+        document.querySelector('.nav-tabs li:nth-last-child(2) a.nav-link').classList.add('active')
+        document.querySelector('.tab-pane.fade:last-child').classList.add('show', 'active')
+    }
 }
 
 function loadColections() {
@@ -403,26 +423,26 @@ function loadColections() {
 
             if (items.length > 0) {
                 let child = '';
-                items.forEach(item => child += '<a class="collapse-item" data-id="' + item.id + '" href="#">' + item.name + '</a>');
+                items.forEach(item => child += '<a class="collapse-item" data-id="' + item.id + '">' + item.name + '</a>');
                 var identic = 'identic_' + cols[i].id;
                 sidebar.innerHTML += `
                     <li class="nav-item">
                         <div class="collection" data-id=${cols[i].id}>
-                            <a class="nav-link collapsed" href="#" data-id=${cols[i].id} data-toggle="collapse" data-target="#${identic}" aria-expanded="false" aria-controls="${identic}">
+                            <a href="#" class="nav-link collapsed" data-id=${cols[i].id} data-toggle="collapse" data-target="#${identic}" aria-expanded="false" aria-controls="${identic}">
                                 <i class="far fa-folder"></i>
                                 <span class="orange items-count"> -${items.length}- </span><span class="collectionName">${cols[i].collection}</span>
                             </a>
-                            <a href="#" class="col-settings" data-settings="${identic}-set"  data-toggle="collapse" data-target="#${identic}-set" aria-expanded="true" aria-controls="${identic}-set">...</a>
+                            <a class="col-settings" data-settings="${identic}-set"  data-toggle="collapse" data-target="#${identic}-set" aria-expanded="true" aria-controls="${identic}-set">...</a>
                             <div class="settings-block bt collapse" id="${identic}-set">
                                 <ul>
                                     <li>
-                                        <a href="#" id="share-collection" disabled>📢</a>
+                                        <a id="share-collection" disabled>📢</a>
                                     </li>
                                     <li>
-                                        <a href="#" id="edit-collection">✍🏽</a>
+                                        <a id="edit-collection">✍🏽</a>
                                     </li>
                                     <li>
-                                        <a href="#" id="remove-collection">🗑️</a>
+                                        <a id="remove-collection">🗑️</a>
                                     </li>
                                 </ul>
                             </div>
@@ -434,6 +454,10 @@ function loadColections() {
                         </div>
                     </li>
                     `
+                var options = {
+                    valueNames: [ 'collectionName' ]
+                };
+                var filterList = new List('filter-list', options);
             }
         }
         let queryItems = document.querySelectorAll('.collapse-item')
@@ -493,7 +517,7 @@ function getRandomInt(max) {
 }
 
 function loadTemplateMessage(_obj) {
-    API.message_template(_obj.tab_host.value, _obj.tab_method.value, (result) => {
+    API.message_template(_obj.tab_host.value, _obj.tab_method.value, _obj.tab_meta.value, (result) => {
         _obj.tab_request.setValue(JSON.stringify(result, undefined, 4));
         showSuccess(_obj)
     })
@@ -519,7 +543,6 @@ function showWarning(msg) {
 
 function exportCollections(path) {
     API.export_collections((result) => {
-        console.log(result)
         fs.writeFile(path, JSON.stringify(result, undefined, 4), function (err) {
             if (err) {
                 return console.log(err);
@@ -545,14 +568,15 @@ function importCollections(path) {
 
 
 function init_client() {
-    loader.style.display = 'none';
     loadColections();
+    loader.style.display = 'none';    
     monacoInit('tab-0')
     initObject = {}
     initObject.tab_id = 0
     initObject.saved = document.querySelector('.tab-pane.fade.show.active').getAttribute('saved')
     initObject.tab_host = document.querySelector('#tab-0 #host')
     initObject.tab_method = document.querySelector('#tab-0 #methods')
+    initObject.tab_meta = document.querySelector('#tab-0 #metadata')    
     initObject.tab_request = editorsList.find(e => e.editor_id === 'tab-0').editor_req // - да, у реквеста берем value
     initObject.tab_response = editorsList.find(e => e.editor_id === 'tab-0').editor_resp
     setCurrentTab(initObject)

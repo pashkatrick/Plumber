@@ -41,7 +41,7 @@ body {
   background: url(../vendor/dockerscreen.png) 100% 100% no-repeat; /* Добавляем фон */
   background-size: cover; /* Масштабируем фон */
   border: 20px solid #046FF6;
-}  
+}
 
 #dockerless img, h3, h1, p {
   text-align: center;
@@ -425,7 +425,7 @@ hr {
 }
 
 .navbar input {
-  width: 450px;
+  width: 400px;
 }
 
 .navbar select {
@@ -1180,6 +1180,7 @@ html {
 body {
   /* height: 100%;
   width: 100%; */
+  overflow: hidden;
 }
 
 a:focus {
@@ -1191,10 +1192,9 @@ a:focus {
 }
 
 #content-wrapper {
-  /* margin-left: 17.7rem; */
-  /* overflow-x: hidden;
-  overflow-y: hidden;
-  height: 100%!important; */
+  max-height: 100vh;
+  overflow: hidden;
+  height: 100vh;
 }
 
 #myTabContent {
@@ -1205,7 +1205,8 @@ a:focus {
   width: 100%;
   /* height: 100%; */
   height: 100vh;
-  /* overflow-y: hidden; */
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 #wrapper #content-wrapper #content {
@@ -1808,4 +1809,10 @@ footer {
   z-index: 10;
   transition: opacity 0.3s, transform 0.3s;
   opacity: 0;
+}
+
+#metadata {
+  display: none;
+  color: #b58161;
+  padding: 5px 16px;
 }
