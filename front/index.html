@@ -242,9 +242,14 @@
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/list.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="vendor/custom.js"></script>
     <script>
         if (window.module) module = window.module;
+    </script>
+    <script>
+        $("a.collapse-item").click(function () {
+            $('a.collapse-item.active').not(this).removeClass('active');
+            $(this).addClass('active');
+        });        
     </script>
     <script>
         require("../front.js");

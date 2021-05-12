@@ -1,7 +1,5 @@
 const API = require("./api-client").API
 const { ipcRenderer, remote, shell } = require('electron');
-// const shell = require("electron").shell;
-// const remote = require("electron").remote;
 const dialog = remote.dialog;
 const monaco = require('monaco-loader');
 const fs = require('fs');
@@ -76,6 +74,7 @@ document.addEventListener('click', function (e) {
                 host: _obj.tab_host.value,
                 method: _obj.tab_method.value,
                 request_body: _obj.tab_request.getValue(),
+                metadata: _obj.tab_meta.value,
                 collection_id: document.querySelector('#accordionSidebar a.nav-link:not(.collapsed)').getAttribute('data-id')
             }
             API.update_item(JSON.stringify(object), () => {
@@ -86,10 +85,13 @@ document.addEventListener('click', function (e) {
         }
     } else if (isOnId(e.path, 'send')) {
         var _obj = getCurrentTab()
+
+        console.log(_obj.tab_meta.value)
+        
         API.send_request(
             _obj.tab_host.value,
             _obj.tab_method.value,
-            _obj.tab_request.getValue(),
+            _obj.tab_request.getValue(), 
             _obj.tab_meta.value, (result) => {
                 _obj.tab_response.setValue(JSON.stringify(result, undefined, 4))
                 showSuccess(_obj)
@@ -137,7 +139,8 @@ document.addEventListener('click', function (e) {
         })
         importCollections(import_file)
     } else if (isOnId(e.path, 'meta')) {
-        // console.log(document.querySelector(e.target.closest('#metadata')))
+        var _obj = getCurrentTab()
+        _obj.tab_meta.style.display = (_obj.tab_meta.style.display == 'block') ? 'none' : 'block'
     } else if (isOnId(e.path, 'support')) {
         shell.openExternal("tg://resolve?domain=pashkatrick")
     } else if (isOnId(e.path, 'newsletter')) {
@@ -216,6 +219,7 @@ function addItem(itemName, colId) {
         host: tab.tab_host.value,
         method: tab.tab_method.value,
         request_body: tab.tab_request.getValue(),
+        metadata: tab.tab_meta.value,
         collection_id: colId
     }
     API.add_item(JSON.stringify(itemObj), () => {
@@ -235,6 +239,7 @@ function getItem(_id, tabTitle) {
     API.get_item(_id, (result) => {
         tabObj.tab_host.value = result.host
         tabObj.tab_request.setValue(result.request)
+        tabObj.tab_meta.value = result.metadata        
         var option = document.createElement("option");
         option.value = result.method;
         option.text = result.method.split(/[.]+/).pop();
@@ -537,7 +542,7 @@ function showWarning(msg) {
 
 function exportCollections(path) {
     API.export_collections((result) => {
-        console.log(result)
+        // console.log(result)
         fs.writeFile(path, JSON.stringify(result, undefined, 4), function (err) {
             if (err) {
                 return console.log(err);
