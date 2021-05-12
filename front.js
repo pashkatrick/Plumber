@@ -87,11 +87,11 @@ document.addEventListener('click', function (e) {
         var _obj = getCurrentTab()
 
         console.log(_obj.tab_meta.value)
-        
+
         API.send_request(
             _obj.tab_host.value,
             _obj.tab_method.value,
-            _obj.tab_request.getValue(), 
+            _obj.tab_request.getValue(),
             _obj.tab_meta.value, (result) => {
                 _obj.tab_response.setValue(JSON.stringify(result, undefined, 4))
                 showSuccess(_obj)
@@ -239,7 +239,7 @@ function getItem(_id, tabTitle) {
     API.get_item(_id, (result) => {
         tabObj.tab_host.value = result.host
         tabObj.tab_request.setValue(result.request)
-        tabObj.tab_meta.value = result.metadata        
+        tabObj.tab_meta.value = result.metadata
         var option = document.createElement("option");
         option.value = result.method;
         option.text = result.method.split(/[.]+/).pop();
