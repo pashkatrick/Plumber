@@ -385,7 +385,7 @@ function _generateTab(id, saved, tabName) {
     currentTabObj.tab_host = document.querySelector('#tab-' + id + ' #host')
     currentTabObj.tab_method = document.querySelector('#tab-' + id + ' #methods')
     currentTabObj.tab_request = document.querySelector('#tab-' + id + ' #request')
-    currentTabObj.tab_meta = document.querySelector('#tab-' + id + ' #metadata')    
+    currentTabObj.tab_meta = document.querySelector('#tab-' + id + ' #metadata')
     currentTabObj.tab_response = document.querySelector('#tab-' + id + ' #response')
     setCurrentTab(currentTabObj)
 }
@@ -570,14 +570,14 @@ function importCollections(path) {
 
 function init_client() {
     loadColections();
-    loader.style.display = 'none';    
+    loader.style.display = 'none';
     monacoInit('tab-0')
     initObject = {}
     initObject.tab_id = 0
     initObject.saved = document.querySelector('.tab-pane.fade.show.active').getAttribute('saved')
     initObject.tab_host = document.querySelector('#tab-0 #host')
     initObject.tab_method = document.querySelector('#tab-0 #methods')
-    initObject.tab_meta = document.querySelector('#tab-0 #metadata')    
+    initObject.tab_meta = document.querySelector('#tab-0 #metadata')
     initObject.tab_request = editorsList.find(e => e.editor_id === 'tab-0').editor_req // - да, у реквеста берем value
     initObject.tab_response = editorsList.find(e => e.editor_id === 'tab-0').editor_resp
     setCurrentTab(initObject)
