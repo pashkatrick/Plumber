@@ -28,24 +28,26 @@ I just create a GUI for [GRPCurl](https://github.com/fullstorydev/grpcurl). This
 > You can use it only with servers, which support reflection API.
 
 ## Features
-...
+- Reflection server methods access
+- Multi tabs operations
+- Independent requests store system
+- Metadata support
+- ...
+
+### Shortcuts
+
+<kbd>CMD</kbd>+<kbd>w</kbd>: close tab  
+<kbd>CMD</kbd>+<kbd>t</kbd>: new tab  
+<kbd>CMD</kbd>+<kbd>s</kbd>: save request  
+<kbd>CMD</kbd>+<kbd>Enter</kbd>: send request  
 
 ### Requirenments
 - Docker
 
 
 ## Build and launch 🚀
-- download last version build
+- download [last version](https://github.com/pashkatrick/Plumber/releases/) Plumber.dmg
 - install it
 - use ``` docker pull pashkatrick/plumber-api ```
-- and ``` docker run ... ```
-<!--
-Create or set data to your .env ([example](https://github.com/pashkatrick/Plumber/blob/tcp-move/env-example), [details](https://pypi.org/project/python-decouple/#usage)), and after that:
-```
-- python3 app.py
-``` -->
-
-<!-- You can use second instanse of termial, to execute first test command:
-```bash
-zerorpc tcp://localhost:1111 test
-``` -->
+- and ``` docker run [your options] ```
+- Thats it!
