@@ -45,7 +45,7 @@ I just create a GUI for [GRPCurl](https://github.com/fullstorydev/grpcurl). This
 - Docker
 
 
-## Build and launch 🚀
+## Get Started 🚀
 - download [last version](https://github.com/pashkatrick/Plumber/releases/) Plumber.dmg
 - install it
 - use ``` docker pull pashkatrick/plumber-api ```
