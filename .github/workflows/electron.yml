@@ -10,10 +10,9 @@ jobs:
         with:
           node-version: 10
       - name: install dependencies
-        run: 
-          - |
-            npm install
-            npm run npm-install
+        run: |
+          npm install
+          npm run npm-install
       - name: build
         run: npm run make
 
@@ -25,9 +24,8 @@ jobs:
         with:
           node-version: 10
       - name: install dependencies
-        run: 
-          - |          
-            npm install
-            npm run npm-install        
+        run: |
+          npm install
+          npm run npm-install
       - name: build
         run: npm run make
