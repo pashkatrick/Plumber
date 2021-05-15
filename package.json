@@ -1,52 +1,37 @@
 {
-  "name": "Plumber",
-  "version": "1.2",
-  "description": "A really missing GUI for GRPC requests",
-  "author": "pashkatrick",
-  "main": "main.js",
-  "homepage": "https://pshktrck.ru/plumber/",
-  "license": "MIT",
-  "scripts": {
-    "start": "electron .",
-    "npm-install": "node_modules/.bin/electron-rebuild; npm install",
-    "pkg": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-build --icon=assets/app.icns",
-    "dmg": "electron-installer-dmg release-build/Plumber-darwin-x64/Plumber.app/ Plumber --out=release-build-dmg --overwrite --icon=assets/app.icns"
-  },
-  "repository": "https://github.com/pashkatrick/Plumber",
-  "keywords": [
-    "Electron",
-    "Python",
-    "GRPC",
-    "Requests",
-    "Testing"
-  ],
-  "dependencies": {
-    "app-root-dir": "^1.0.2",
-    "monaco-editor": "^0.17.0",
-    "monaco-loader": "^1.0.0",
-    "zeromq": "^5.1.0",
-    "zerorpc": "^0.9.8"
-  },
-  "devDependencies": {
-    "electron": "^4.2.12",
-    "electron-localshortcut": "^3.2.1",
-    "electron-packager": "^15.2.0",
-    "electron-installer-dmg": "",
-    "electron-squirrel-startup": "^1.0.0"
-  },
-  "config": {
-    "forge": {
-      "publishers": [
-        {
-          "name": "@electron-forge/publisher-github",
-          "config": {
-            "repository": {
-              "owner": "pashkatrick",
-              "name": "Plumber"
-            }
-          }
-        }
-      ]
+    "name": "Plumber",
+    "version": "1.2.0",
+    "description": "A really missing GUI for GRPC requests",
+    "author": "pashkatrick",
+    "main": "main.js",
+    "homepage": "https://pshktrck.ru/plumber/",
+    "license": "MIT",
+    "scripts": {
+        "start": "electron .",
+        "npm-install": "node_modules/.bin/electron-rebuild; npm install",
+        "pkg": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-build --icon=assets/app.icns",
+        "dmg": "electron-installer-dmg release-build/Plumber-darwin-x64/Plumber.app/ Plumber --out=release-build-dmg --overwrite --icon=assets/app.icns"
+    },
+    "repository": "https://github.com/pashkatrick/Plumber",
+    "keywords": [
+        "Electron",
+        "Python",
+        "GRPC",
+        "Requests",
+        "Testing"
+    ],
+    "dependencies": {
+        "app-root-dir": "^1.0.2",
+        "monaco-editor": "^0.17.0",
+        "monaco-loader": "^1.0.0",
+        "zeromq": "^5.1.0",
+        "zerorpc": "^0.9.8"
+    },
+    "devDependencies": {
+        "electron": "^4.2.12",
+        "electron-localshortcut": "^3.2.1",
+        "electron-packager": "^15.2.0",
+        "electron-installer-dmg": "",
+        "electron-squirrel-startup": "^1.0.0"
     }
-  }
 }
