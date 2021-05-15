@@ -17,8 +17,8 @@ jobs:
         run: |
           npm run mac-pkg
           npm run dmg
-          ls release-build
-          ls release-build-dmg
+          ls -la release-build
+          ls -la release-build-dmg
       - name: Step 3 - Use the Upload Artifact GitHub Action
         uses: actions/upload-artifact@v2
         with:
@@ -40,8 +40,8 @@ jobs:
         run: |
           npm run win-pkg
           npm run exe
-          ls -la release-build
-          ls -la release-build-exe
+          ls release-build
+          ls release-build-exe
       - name: Step 3 - Use the Upload Artifact GitHub Action
         uses: actions/upload-artifact@v2
         with:
