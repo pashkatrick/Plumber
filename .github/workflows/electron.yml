@@ -45,9 +45,5 @@ jobs:
       - name: Step 3 - Use the Upload Artifact GitHub Action
         uses: actions/upload-artifact@v2
         with:
-          name: |
-            plumber.exe
-            plumber.msi
-          path: |
-            release-build-exe/*.exe
-            release-build-exe/*.msi
+          name: plumber.exe
+          path: release-build-exe/*.exe
