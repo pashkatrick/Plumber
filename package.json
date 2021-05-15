@@ -23,7 +23,8 @@
         "app-root-dir": "^1.0.2",
         "monaco-editor": "^0.17.0",
         "monaco-loader": "^1.0.0",
-        "zerorpc": "^0.9.8"
+        "zeromq": "^5.1.0",
+        "zerorpc": "^0.9.8"        
     },
     "devDependencies": {
         "electron": "^4.2.12",
