@@ -22,7 +22,7 @@ jobs:
       - name: Step 3 - Use the Upload Artifact GitHub Action
         uses: actions/upload-artifact@v2
         with:
-          name: Plumber
+          name: plumber.dmg
           path: release-build-dmg/Plumber.dmg
 
   build_on_win:
@@ -45,7 +45,9 @@ jobs:
       - name: Step 3 - Use the Upload Artifact GitHub Action
         uses: actions/upload-artifact@v2
         with:
-          name: Plumber
+          name: |
+            plumber.exe
+            plumber.msi
           path: |
             release-build-exe/*.exe
             release-build-exe/*.msi
