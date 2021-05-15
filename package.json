@@ -35,6 +35,8 @@
         "electron-packager": "^15.2.0",
         "electron-installer-dmg": "*",
         "electron-installer-windows": "*",
+        "electron-rebuild": "^1.11.0",
+        "electron-reloader": "^1.1.0",        
         "electron-squirrel-startup": "^1.0.0"
     }
 }
