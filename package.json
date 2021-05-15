@@ -1,6 +1,6 @@
 {
     "name": "Plumber",
-    "version": "0.1.0",
+    "version": "1.2",
     "description": "A really missing GUI for GRPC requests",
     "author": "mannidung",
     "main": "main.js",
@@ -9,7 +9,7 @@
     "scripts": {
         "start": "electron .",
         "npm-install": "node_modules/.bin/electron-rebuild; npm install",
-        "dist": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-build --icon=assets/app.icns",
+        "pkg": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-build --icon=assets/app.icns",
         "dmg": "electron-installer-dmg release-build/Plumber-darwin-x64/Plumber.app/ Plumber --out=release-build-dmg --overwrite --icon=assets/app.icns"
     },
     "repository": "https://github.com/pashkatrick/Plumber",
