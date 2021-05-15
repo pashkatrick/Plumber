@@ -9,15 +9,17 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 10
-      - name: install dependencies
+      - name: Step 1 - Install dependencies
         run: |
           npm install
           npm run npm-install
-      - name: build
+      - name: Step 2 - Build packages and binaries
         run: |
           npm run pkg
           npm run dmg
-      - name: publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run publish
+
+      - name: Step 3 - Use the Upload Artifact GitHub Action
+        uses: actions/upload-artifact@v2
+        with: 
+          name: Plumber.dmg
+          path: release-build-dmg/Plumber.dmg
