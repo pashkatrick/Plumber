@@ -17,17 +17,3 @@ jobs:
         run: |
           npm run pkg
           npm run dmg
-
-  # build_on_win:
-  #   runs-on: windows-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-node@master
-  #       with:
-  #         node-version: 10
-  #     - name: install dependencies
-  #       run: |
-  #         npm install
-  #         npm run npm-install
-  #     - name: build
-  #       run: npm run make
