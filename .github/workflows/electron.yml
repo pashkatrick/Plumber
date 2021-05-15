@@ -2,28 +2,28 @@ name: Build
 on: [pull_request]
 
 jobs:
-  build_on_mac:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@master
-        with:
-          node-version: 10
-      - name: Step 1 - Install dependencies
-        run: |
-          npm install
-          npm run npm-install
-      - name: Step 2 - Build packages and binaries
-        run: |
-          npm run mac-pkg
-          npm run dmg
-          ls -la release-build
-          ls -la release-build-dmg
-      - name: Step 3 - Use the Upload Artifact GitHub Action
-        uses: actions/upload-artifact@v2
-        with:
-          name: Plumber.dmg
-          path: release-build-dmg/Plumber.dmg
+  # build_on_mac:
+  #   runs-on: macos-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@master
+  #       with:
+  #         node-version: 10
+  #     - name: Step 1 - Install dependencies
+  #       run: |
+  #         npm install
+  #         npm run npm-install
+  #     - name: Step 2 - Build packages and binaries
+  #       run: |
+  #         npm run mac-pkg
+  #         npm run dmg
+  #         ls -la release-build
+  #         ls -la release-build-dmg
+  #     - name: Step 3 - Use the Upload Artifact GitHub Action
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: Plumber.dmg
+  #         path: release-build-dmg/Plumber.dmg
 
   build_on_win:
     runs-on: windows-latest
