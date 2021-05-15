@@ -1,15 +1,18 @@
 {
     "name": "Plumber",
-    "version": "0.1.0",
+    "version": "1.2.0",
     "description": "A really missing GUI for GRPC requests",
-    "author": "mannidung",
+    "author": "pashkatrick",
     "main": "main.js",
     "homepage": "https://pshktrck.ru/plumber/",
     "license": "MIT",
     "scripts": {
         "start": "electron .",
         "npm-install": "node_modules/.bin/electron-rebuild; npm install",
-        "dist": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-build --icon=assets/app.icns"
+        "mac-pkg": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-build --icon=assets/app.icns",
+        "win-pkg": "electron-packager . --overwrite --platform=win32 --arch=x64 --prune=true --out=release-build --icon=assets/app.ico",        
+        "dmg": "electron-installer-dmg release-build/Plumber-darwin-x64/Plumber.app/ Plumber --out=release-build-dmg --overwrite --icon=assets/app.icns",
+        "exe": "electron-installer-windows --src release-build/Plumber-win32-x64/ --dest release-build-exe --overwrite --icon=assets/app.ico"
     },
     "repository": "https://github.com/pashkatrick/Plumber",
     "keywords": [
@@ -23,14 +26,16 @@
         "app-root-dir": "^1.0.2",
         "monaco-editor": "^0.17.0",
         "monaco-loader": "^1.0.0",
+        "zeromq": "^5.1.0",
         "zerorpc": "^0.9.8"
     },
     "devDependencies": {
         "electron": "^4.2.12",
         "electron-localshortcut": "^3.2.1",
         "electron-packager": "^15.2.0",
-        "electron-rebuild": "^1.11.0",
-        "electron-reloader": "^1.1.0",
+        "electron-installer-dmg": "*",
+        "electron-installer-windows": "*",
+        "electron-rebuild": "^1.11.0",        
         "electron-squirrel-startup": "^1.0.0"
     }
 }
