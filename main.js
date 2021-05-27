@@ -1,6 +1,10 @@
 const { app, BrowserWindow, globalShortcut, Menu } = require('electron')
 const path = require('path')
 const config = require('./config')
+// нужен для хранения данных
+const userPath = app.getPath('userData')
+
+console.log(userPath)
 
 let mainWindow
 
@@ -31,7 +35,7 @@ function createWindow() {
     }
   })
 
-  mainWindow.loadFile(path.join('front', 'index.html'))
+  mainWindow.loadFile(path.join('app', 'index.html'))
 
   if (config.DEBUG) {
     mainWindow.webContents.openDevTools()
