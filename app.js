@@ -1,5 +1,6 @@
 const API = require("./modules/api-client").API
 const DB_API = require("./modules/db-client").DB_API
+const path = require('path');
 const { ipcRenderer, remote, shell } = require('electron');
 const dialog = remote.dialog;
 const monaco = require('monaco-loader');
@@ -40,8 +41,18 @@ var editorConfig = {
 //     console.log(e)
 // }
 
-DB_API.read()
-console.log(fs.readdirSync('/Users/payudin/Library/Application Support/Plumber'))
+// console.log(fs.readdirSync('/Users/payudin/Library/Application Support/Plumber'))
+// let fixedURL = path.join(process.resourcesPath);
+// console.log(fixedURL)
+// console.log(fs.readdirSync(fixedURL))
+
+// API.method_list('searchteam-search-api.osrch.stg.s.o3.ru:82', (result) => {
+//     console.log(result)
+// })
+
+API.view_method_scheme('searchteam-search-api.osrch.stg.s.o3.ru:82', 'search.ItemsService', (result) => {
+    console.log(result)
+})
 
 
 ipcRenderer.on('tab-shut-down', (event, arg) => {
@@ -175,7 +186,7 @@ function getCurrentTab() {
     currentTabObj.saved = document.querySelector('.tab-pane.fade.show.active').getAttribute('saved')
     currentTabObj.tab_host = document.querySelector('#' + currentTab + ' #host')
     currentTabObj.tab_method = document.querySelector('#' + currentTab + ' #methods')
-    currentTabObj.tab_meta= document.querySelector('#' + currentTab + ' #metadata')
+    currentTabObj.tab_meta = document.querySelector('#' + currentTab + ' #metadata')
     currentTabObj.tab_request = editorsList.find(e => e.editor_id === currentTab).editor_req
     currentTabObj.tab_response = editorsList.find(e => e.editor_id === currentTab).editor_resp
     return currentTabObj
@@ -389,7 +400,7 @@ function _generateTab(id, saved, tabName) {
     currentTabObj.tab_host = document.querySelector('#tab-' + id + ' #host')
     currentTabObj.tab_method = document.querySelector('#tab-' + id + ' #methods')
     currentTabObj.tab_request = document.querySelector('#tab-' + id + ' #request')
-    currentTabObj.tab_meta = document.querySelector('#tab-' + id + ' #metadata')    
+    currentTabObj.tab_meta = document.querySelector('#tab-' + id + ' #metadata')
     currentTabObj.tab_response = document.querySelector('#tab-' + id + ' #response')
     setCurrentTab(currentTabObj)
 }
@@ -459,7 +470,7 @@ function loadColections() {
                     </li>
                     `
                 var options = {
-                    valueNames: [ 'collectionName' ]
+                    valueNames: ['collectionName']
                 };
                 var filterList = new List('filter-list', options);
             }
@@ -573,14 +584,14 @@ function importCollections(path) {
 
 function init_client() {
     loadColections();
-    loader.style.display = 'none';    
+    loader.style.display = 'none';
     monacoInit('tab-0')
     initObject = {}
     initObject.tab_id = 0
     initObject.saved = document.querySelector('.tab-pane.fade.show.active').getAttribute('saved')
     initObject.tab_host = document.querySelector('#tab-0 #host')
     initObject.tab_method = document.querySelector('#tab-0 #methods')
-    initObject.tab_meta = document.querySelector('#tab-0 #metadata')    
+    initObject.tab_meta = document.querySelector('#tab-0 #metadata')
     initObject.tab_request = editorsList.find(e => e.editor_id === 'tab-0').editor_req // - да, у реквеста берем value
     initObject.tab_response = editorsList.find(e => e.editor_id === 'tab-0').editor_resp
     setCurrentTab(initObject)

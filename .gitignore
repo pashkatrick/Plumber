@@ -3,6 +3,7 @@ protos/
 .vscode/
 ToDo.py
 db_test.py
+*.sh
 .env
 env-example
 builder

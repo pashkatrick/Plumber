@@ -1,10 +1,8 @@
 const { app, BrowserWindow, globalShortcut, Menu } = require('electron')
 const path = require('path')
 const config = require('./config')
-// нужен для хранения данных
-const userPath = app.getPath('userData')
 
-console.log(userPath)
+// нужен для хранения данных
 
 let mainWindow
 
