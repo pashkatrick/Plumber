@@ -1,10 +1,14 @@
-const API = require("./modules/api-client").API
-const DB_API = require("./modules/db-client").DB_API
+const ApiClient = require("./modules/api-client")
+const DbClient = require("./modules/db-client")
 const path = require('path');
 const { ipcRenderer, remote, shell } = require('electron');
 const dialog = remote.dialog;
 const monaco = require('monaco-loader');
 const fs = require('fs');
+
+let DB = new DbClient
+let API = new ApiClient
+
 let loader = document.querySelector('#loader')
 let newTab = document.querySelector('#new')
 let tabs = document.querySelector('#mainTabs')
@@ -30,29 +34,36 @@ var editorConfig = {
 }
 
 // INIT
-// try {
-//     API.test(() => {
-//         monaco().then(monaco => {
-//             monaccco = monaco
-//             init_client()
-//         })
-//     })
-// } catch (e) {
-//     console.log(e)
-// }
+try {
+    monaco().then(monaco => {
+        monaccco = monaco
+        init_client()
+    })
+} catch (e) {
+    console.log(e)
+}
 
-// console.log(fs.readdirSync('/Users/payudin/Library/Application Support/Plumber'))
-// let fixedURL = path.join(process.resourcesPath);
-// console.log(fixedURL)
-// console.log(fs.readdirSync(fixedURL))
-
-// API.method_list('searchteam-search-api.osrch.stg.s.o3.ru:82', (result) => {
-//     console.log(result)
+// DB.getItem(2).then(response => {
+//     console.log(response)
 // })
 
-API.view_method_scheme('searchteam-search-api.osrch.stg.s.o3.ru:82', 'search.ItemsService', (result) => {
-    console.log(result)
-})
+// DB.getItem(2).then(result => {
+//     console.log(result)
+//     console.log('getнулся')
+// })
+
+// DB.removeCollection(3)
+// console.log(DB.getItemsByCollection(1))
+
+// console.log(d.getCollections())
+
+// DB.addItem(1, {
+//     host: "searchteam-suggest-api.osrch.stg.s.o3.ru:82",
+//     metadata: "",
+//     method: "suggests.RedirectService.Get",
+//     name: "testic",
+//     request: ""
+// })
 
 
 ipcRenderer.on('tab-shut-down', (event, arg) => {
@@ -100,21 +111,12 @@ document.addEventListener('click', function (e) {
         }
     } else if (isOnId(e.path, 'send')) {
         var _obj = getCurrentTab()
+        sendRequest(_obj)
 
-        console.log(_obj.tab_meta.value)
-
-        API.send_request(
-            _obj.tab_host.value,
-            _obj.tab_method.value,
-            _obj.tab_request.getValue(),
-            _obj.tab_meta.value, (result) => {
-                _obj.tab_response.setValue(JSON.stringify(result, undefined, 4))
-                showSuccess(_obj)
-            })
     } else if (isOnId(e.path, 'trash')) {
         var _obj = getCurrentTab()
         if (_obj.saved == 'true') {
-            API.remove_item(_obj.tab_id.split(/[-]+/).pop(), (error, result) => {
+            DB.removeItem(_obj.tab_id.split(/[-]+/).pop(), (error, result) => {
                 if (error) {
                     showError(error.message)
                 } else {
@@ -217,12 +219,11 @@ function updateCollection(name, collection_id) {
         name: name,
         collection_id: collection_id
     };
-    API.update_collection(JSON.stringify(object), (result) => {
-    })
+    API.update_collection(JSON.stringify(object), (result) => {})
 }
 
 function addItemWithCollection(itemName, colName) {
-    API.add_collection(colName, (result) => {
+    DB.addCollection(colName, (result) => {
         addItem(itemName, result)
     })
 }
@@ -237,30 +238,44 @@ function addItem(itemName, colId) {
         metadata: tab.tab_meta.value,
         collection_id: colId
     }
-    API.add_item(JSON.stringify(itemObj), () => {
+    DB.addItem(JSON.stringify(itemObj), () => {
         loadColections()
     })
 }
 
 function removeCollection(id) {
-    API.remove_collection(id, () => {
+    DB.removeCollection(id, () => {
         document.querySelector('.collection[data-id="' + id + '"]').remove()
     })
 }
 
-function getItem(_id, tabTitle) {
+async function getItemTab(_id, tabTitle) {
     addNewTab(_id, tabTitle) // ничего не ретёрнит
     var tabObj = getCurrentTab()
-    API.get_item(_id, (result) => {
-        tabObj.tab_host.value = result.host
-        tabObj.tab_request.setValue(result.request)
-        tabObj.tab_meta.value = result.metadata
-        var option = document.createElement("option");
-        option.value = result.method;
-        option.text = result.method.split(/[.]+/).pop();
-        tabObj.tab_method.innerHTML = ''
-        tabObj.tab_method.appendChild(option)
-    })
+    var item = await DB.getItem(_id)
+    // return item
+    // DB.getItem(_id).then(result => {
+    console.log(item)
+    // tabObj.tab_host.value = result.host
+    // tabObj.tab_request.setValue(result.request)
+    // tabObj.tab_meta.value = result.metadata
+    // var option = document.createElement("option");
+    // option.value = result.method;
+    // option.text = result.method.split(/[.]+/).pop();
+    // tabObj.tab_method.innerHTML = ''
+    // tabObj.tab_method.appendChild(option)
+    // })
+}
+
+function sendRequest(_obj) {
+    API.sendRequest(
+        _obj.tab_host.value,
+        _obj.tab_method.value,
+        _obj.tab_request.getValue(),
+        _obj.tab_meta.value).then(result => {
+            _obj.tab_response.setValue(JSON.stringify(result, undefined, 4))
+            showSuccess(_obj)
+        })
 }
 
 function openModal() {
@@ -274,13 +289,13 @@ function closeModal() {
 }
 
 function loadMethods(tab) {
-    API.method_list(tab.tab_host.value, tab.tab_meta.value, (result) => {
-        var meths = result.methods
+    API.methodList(tab.tab_host.value, tab.tab_meta.value).then(result => {
+        var meths = result
         methods = document.querySelector('#' + tab.tab_id + ' #methods')
         methods.innerHTML = ''
         showWaiting(tab)
         for (var i = 0; i < meths.length; i++) {
-            var option = document.createElement("option");
+            option = document.createElement("option");
             option.value = meths[i].service;
             option.text = '--' + meths[i].service.split(/[.]+/).pop() + '--';
             option.disabled = true
@@ -291,6 +306,7 @@ function loadMethods(tab) {
                 option.text = meths[i].methods[j].split(/[.]+/).pop();
                 methods.appendChild(option)
             }
+
         }
     })
 }
@@ -418,75 +434,77 @@ function closeCurrentTab() {
 }
 
 function loadColections() {
-    API.get_collections((result) => {
-        showWaiting(getCurrentTab())
-        var cols = result.collections
-        let sidebar = document.querySelector('#accordionSidebar')
-        document.querySelectorAll('#accordionSidebar .nav-item').forEach(e => e.parentNode.removeChild(e));
-        modalList = document.querySelector('#collections')
-        modalList.innerHTML = ''
-        for (i = 0; i < cols.length; i++) {
-            var items = cols[i].items
+    showWaiting(getCurrentTab())
+    var cols = DB.getCollections()
+    let sidebar = document.querySelector('#accordionSidebar')
+    document.querySelectorAll('#accordionSidebar .nav-item').forEach(e => e.parentNode.removeChild(e));
+    modalList = document.querySelector('#collections')
+    modalList.innerHTML = ''
+    for (i = 0; i < cols.length; i++) {
+        var items = cols[i].items
 
-            // Модалка
-            if (items.length > 0) {
-                var option = document.createElement("option");
-                option.value = cols[i].id
-                option.text = cols[i].collection
-                modalList.appendChild(option)
-            }
-
-            if (items.length > 0) {
-                let child = '';
-                items.forEach(item => child += '<a class="collapse-item" data-id="' + item.id + '">' + item.name + '</a>');
-                var identic = 'identic_' + cols[i].id;
-                sidebar.innerHTML += `
-                    <li class="nav-item">
-                        <div class="collection" data-id=${cols[i].id}>
-                            <a href="#" class="nav-link collapsed" data-id=${cols[i].id} data-toggle="collapse" data-target="#${identic}" aria-expanded="false" aria-controls="${identic}">
-                                <i class="far fa-folder"></i>
-                                <span class="orange items-count"> -${items.length}- </span><span class="collectionName">${cols[i].collection}</span>
-                            </a>
-                            <a class="col-settings" data-settings="${identic}-set"  data-toggle="collapse" data-target="#${identic}-set" aria-expanded="true" aria-controls="${identic}-set">...</a>
-                            <div class="settings-block bt collapse" id="${identic}-set">
-                                <ul>
-                                    <li>
-                                        <a id="share-collection" disabled>📢</a>
-                                    </li>
-                                    <li>
-                                        <a id="edit-collection">✍🏽</a>
-                                    </li>
-                                    <li>
-                                        <a id="remove-collection">🗑️</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div id="${identic}" class="collapse" aria-labelledby="heading${cols[i]}" data-parent="#accordionSidebar" style="">
-                            <div class="py-2 collapse-inner">
-                                ${child}
-                            </div>
-                        </div>
-                    </li>
-                    `
-                var options = {
-                    valueNames: ['collectionName']
-                };
-                var filterList = new List('filter-list', options);
-            }
+        // Модалка
+        if (items.length > 0) {
+            var option = document.createElement("option");
+            option.value = cols[i].id
+            option.text = cols[i].collection
+            modalList.appendChild(option)
         }
-        let queryItems = document.querySelectorAll('.collapse-item')
-        queryItems.forEach(function (elem) {
-            elem.addEventListener('click', function () {
-                tempItem.item_id = elem.getAttribute('data-id')
-                tempItem.item_name = elem.textContent
-                tempItem.collection_id = 'test_id'
-                tempItem.collection_name = 'test_name'
-                getItem(tempItem.item_id, elem.textContent)
-            });
-        });
-    })
+
+        if (items.length > 0) {
+            let child = '';
+            items.forEach(item => child += '<a class="collapse-item" data-id="' + item.id + '">' + item.name + '</a>');
+            var identic = 'identic_' + cols[i].id;
+            sidebar.innerHTML += `
+                <li class="nav-item">
+                    <div class="collection" data-id=${cols[i].id}>
+                        <a href="#" class="nav-link collapsed" data-id=${cols[i].id} data-toggle="collapse" data-target="#${identic}" aria-expanded="false" aria-controls="${identic}">
+                            <i class="far fa-folder"></i>
+                            <span class="orange items-count"> -${items.length}- </span><span class="collectionName">${cols[i].collection}</span>
+                        </a>
+                        <a href="#" class="col-settings" data-settings="${identic}-set"  data-toggle="collapse" data-target="#${identic}-set" aria-expanded="true" aria-controls="${identic}-set">...</a>
+                        <div class="settings-block bt collapse" id="${identic}-set">
+                            <ul>
+                                <li>
+                                    <a href="#" id="share-collection" disabled>📢</a>
+                                </li>
+                                <li>
+                                    <a href="#" id="edit-collection">✍🏽</a>
+                                </li>
+                                <li>
+                                    <a href="#" id="remove-collection">🗑️</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="${identic}" class="collapse" aria-labelledby="heading${cols[i]}" data-parent="#accordionSidebar" style="">
+                        <div class="py-2 collapse-inner">
+                            ${child}
+                        </div>
+                    </div>
+                </li>
+                `
+            var options = {
+                valueNames: ['collectionName']
+            };
+            var filterList = new List('filter-list', options);
+        }
+    }
+    let queryItems = document.querySelectorAll('.collapse-item')
+    queryItems.forEach(function (elem) {
+        elem.addEventListener('click', function(){
+            tempItem.item_id = elem.getAttribute('data-id')
+            tempItem.item_name = elem.textContent
+            tempItem.collection_id = 'test_id'
+            tempItem.collection_name = 'test_name'
+            getItemTab(tempItem.item_id, elem.textContent).then(res => {
+                console.log(res)
+            })
+        })
+    });
 }
+
+
 
 function monacoInit(_tabId) {
     var editorsObj = {}
@@ -513,18 +531,18 @@ function showSuccess(tab) {
 }
 
 function showWaiting(tab) {
-    var _default = document.querySelector('#' + tab.tab_id + ' .icon-default')
-    var _hover = document.querySelector('#' + tab.tab_id + ' .icon-waiting')
-    _hover.style.transform = 'cale(1)'
-    _hover.style.opacity = '1'
-    _default.style.transform = 'scale(.5)'
-    _default.style.opacity = '0'
-    setTimeout(() => {
-        _hover.style.transform = 'scale(.5)'
-        _hover.style.opacity = '0'
-        _default.style.transform = 'scale(1)'
-        _default.style.opacity = '1'
-    }, 1200);
+    // var _default = document.querySelector('#' + tab.tab_id + ' .icon-default')
+    // var _hover = document.querySelector('#' + tab.tab_id + ' .icon-waiting')
+    // _hover.style.transform = 'scale(1)'
+    // _hover.style.opacity = '1'
+    // _default.style.transform = 'scale(.5)'
+    // _default.style.opacity = '0'
+    // setTimeout(() => {
+    //     _hover.style.transform = 'scale(.5)'
+    //     _hover.style.opacity = '0'
+    //     _default.style.transform = 'scale(1)'
+    //     _default.style.opacity = '1'
+    // }, 1200);
 }
 
 function getRandomInt(max) {
@@ -532,7 +550,7 @@ function getRandomInt(max) {
 }
 
 function loadTemplateMessage(_obj) {
-    API.message_template(_obj.tab_host.value, _obj.tab_method.value, _obj.tab_meta.value, (result) => {
+    API.messageTemplate(_obj.tab_host.value, _obj.tab_method.value, _obj.tab_meta.value).then(result => {
         _obj.tab_request.setValue(JSON.stringify(result, undefined, 4));
         showSuccess(_obj)
     })
@@ -583,9 +601,12 @@ function importCollections(path) {
 
 
 function init_client() {
-    loadColections();
-    loader.style.display = 'none';
     monacoInit('tab-0')
+    loader.style.display = 'none';
+    loadColections();
+
+    // getItemTab(3, 'check')
+
     initObject = {}
     initObject.tab_id = 0
     initObject.saved = document.querySelector('.tab-pane.fade.show.active').getAttribute('saved')
