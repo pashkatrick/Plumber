@@ -1,5 +1,6 @@
-// let resourcesURL = path.join(process.resourcesPath);
 const Store = require('./store.js');
+const path = require('path');
+const fs = require('fs');
 
 const store = new Store({
     configName: 'collections'
@@ -17,17 +18,15 @@ Array.prototype.remove = function () {
 };
 
 class DB_API {
-    constructor() {
-        this.users = 'https://jsonplaceholder.typicode.com/users';
-        this.posts = 'https://jsonplaceholder.typicode.com/posts';
-    }
+    constructor() {}
 
     addCollection(collectionName) {
         var collections = this.getCollections()
         var newCount = this.__getCollectionsCount() + 1
-        collections.push({ collection: collectionName, id: newCount })
+        collections.push({ collection: collectionName, id: newCount, items: [] })
         store.set('collections', collections)
         this.__setCollectionsCount(newCount)
+        return newCount
     }
 
     addItem(collectionId, object) {
@@ -35,11 +34,12 @@ class DB_API {
         var response
         doc.forEach(function (collection) {
             if (collection.id === collectionId) {
-                var newCount = this.__getItemsCount() + 1
+                // var newCount = this.__getItemsCount() + 1
+                var newCount = doc.length + 1
                 object.id = newCount
                 collection.items.push(object)
                 store.set('collections', doc)
-                this.__setItemsCount(newCount)
+                // this.__setItemsCount(newCount)
                 response = newCount
             }
         });
@@ -61,31 +61,18 @@ class DB_API {
         return response
     }
 
-    async getItem(itemId) {
-        return await new Promise(resolve => {
-            var doc = this.getCollections()
-            doc.forEach(function (collection) {
-                collection.items.forEach(function (item) {
-                    if (item.id === itemId) {
-                        resolve(item)
-                    }
-                })
-            });
-        })
+    getItem(itemId) {
+        var doc = this.getCollections()
+        var response
+        doc.forEach(function (collection) {
+            collection.items.forEach(function (item) {
+                if (item.id === itemId) {
+                    response = item
+                }
+            })
+        });
+        return response
     }
-
-    // getItem(itemId) {
-    //     var doc = this.getCollections()
-    //     var response
-    //     doc.forEach(function (collection) {
-    //         collection.items.forEach(function (item) {
-    //             if (item.id === itemId) {
-    //                 response = item
-    //             }
-    //         })
-    //     });
-    //     return response
-    // }
 
     removeCollection(collectionId) {
         var doc = this.getCollections()
@@ -104,9 +91,12 @@ class DB_API {
         var doc = this.getCollections()
         var response
         doc.forEach(function (collection) {
-            collection.items.forEach(function (item) {
+            var __items = collection.items
+            __items.forEach(function (item) {
                 if (item.id === itemId) {
-                    collection.items.remove(item)
+                    __items.remove(item)
+                    // __items.push(object)
+                    store.set('collections', doc)
                     response = item.id
                 }
             })
@@ -114,12 +104,42 @@ class DB_API {
         return response
     }
 
-    updateCollections() {
-
+    updateCollection(object) {
+        var doc = this.getCollections()
+        var response
+        doc.forEach(function (collection) {
+            var _id = parseInt(object.collection_id)
+            if (collection.id === _id) {
+                var __newCol = {
+                    collection: object.name,
+                    id: _id,
+                    items: collection.items
+                }
+                doc.remove(collection)
+                doc.push(__newCol)
+                store.set('collections', doc)
+                response = __newCol.id
+            }
+        });
+        return response
     }
 
-    updateCollections() {
-
+    updateItem(object) {
+        var doc = this.getCollections()
+        var response
+        doc.forEach(function (collection) {
+            var __items = collection.items
+            __items.forEach(function (item) {
+                if (item.id === object.id) {
+                    console.log(object)
+                    __items.remove(item)
+                    __items.push(object)
+                    store.set('collections', doc)
+                    response = item.id
+                }
+            })
+        });
+        return response
     }
 
     importCollections(file) {
@@ -127,7 +147,7 @@ class DB_API {
     }
 
     exportCollections(path) {
-
+        store.export(path)
     }
 
     __setItemsCount(count) {
@@ -149,32 +169,4 @@ class DB_API {
 
 module.exports = DB_API;
 
-
-
-// Object.freeze(API)
-
-// const API = {
-
-//     update_collection: (object, callback) => {
-//         client.invoke("update_collection_handler", object, (error, result) => {
-//             if (error) {
-//                 console.log(error)
-//                 return null
-//             } else {
-//                 callback(result)
-//             }
-//         })
-//     },
-//     // ITEMS
-//     update_item: (object, callback) => {
-//         client.invoke("update_item_handler", object, (error, result) => {
-//             if (error) {
-//                 console.log(error)
-//                 return null
-//             } else {
-//                 callback(result)
-//             }
-//         })
-//     },
-// }
 

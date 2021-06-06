@@ -4,7 +4,6 @@ const path = require('path');
 const { ipcRenderer, remote, shell } = require('electron');
 const dialog = remote.dialog;
 const monaco = require('monaco-loader');
-const fs = require('fs');
 
 let DB = new DbClient
 let API = new ApiClient
@@ -43,29 +42,6 @@ try {
     console.log(e)
 }
 
-// DB.getItem(2).then(response => {
-//     console.log(response)
-// })
-
-// DB.getItem(2).then(result => {
-//     console.log(result)
-//     console.log('getнулся')
-// })
-
-// DB.removeCollection(3)
-// console.log(DB.getItemsByCollection(1))
-
-// console.log(d.getCollections())
-
-// DB.addItem(1, {
-//     host: "searchteam-suggest-api.osrch.stg.s.o3.ru:82",
-//     metadata: "",
-//     method: "suggests.RedirectService.Get",
-//     name: "testic",
-//     request: ""
-// })
-
-
 ipcRenderer.on('tab-shut-down', (event, arg) => {
     closeCurrentTab()
 })
@@ -75,9 +51,11 @@ ipcRenderer.on('tab-new-empty', (event, arg) => {
 })
 
 ipcRenderer.on('enter-action', (event, arg) => {
+    // TODO: сделать отправку запроса
 })
 
 ipcRenderer.on('save-action', (event, arg) => {
+    // TODO: сделать сохранение
 })
 
 newTab.addEventListener('click', () => {
@@ -95,7 +73,7 @@ document.addEventListener('click', function (e) {
         var _obj = getCurrentTab()
         if (_obj.saved == 'true') {
             var object = {
-                item_id: _obj.tab_id.split(/[-]+/).pop(),
+                id: parseInt(_obj.tab_id.split(/[-]+/).pop()),
                 name: _obj.tab_name,
                 host: _obj.tab_host.value,
                 method: _obj.tab_method.value,
@@ -103,9 +81,8 @@ document.addEventListener('click', function (e) {
                 metadata: _obj.tab_meta.value,
                 collection_id: document.querySelector('#accordionSidebar a.nav-link:not(.collapsed)').getAttribute('data-id')
             }
-            API.update_item(JSON.stringify(object), () => {
-                showSuccess(_obj)
-            })
+            DB.updateItem(object)
+            showSuccess(_obj)
         } else {
             openModal()
         }
@@ -116,13 +93,8 @@ document.addEventListener('click', function (e) {
     } else if (isOnId(e.path, 'trash')) {
         var _obj = getCurrentTab()
         if (_obj.saved == 'true') {
-            DB.removeItem(_obj.tab_id.split(/[-]+/).pop(), (error, result) => {
-                if (error) {
-                    showError(error.message)
-                } else {
-                    loadColections()
-                }
-            })
+            DB.removeItem(parseInt(_obj.tab_id.split(/[-]+/).pop()))
+            loadColections()
         }
     } else if (isOnId(e.path, 'template')) {
         var _obj = getCurrentTab()
@@ -206,7 +178,7 @@ function editCollection(target_id) {
 
     // TODO: повесить на событие Enter - с проверкой, что есть input (отдельная функ-ция)
     input.addEventListener('blur', function () {
-        updateCollection(input.value, target_id)
+        updateMenuCollection(input.value, target_id)
         var span = document.createElement('span');
         span.textContent = input.value
         span.classList.add('collectionName')
@@ -214,18 +186,24 @@ function editCollection(target_id) {
     })
 }
 
-function updateCollection(name, collection_id) {
+function updateMenuCollection(name, collection_id) {
     var object = {
-        name: name,
-        collection_id: collection_id
+        collection_id: collection_id,
+        name: name
     };
-    API.update_collection(JSON.stringify(object), (result) => {})
+    DB.updateCollection(object)
 }
 
 function addItemWithCollection(itemName, colName) {
-    DB.addCollection(colName, (result) => {
-        addItem(itemName, result)
-    })
+    var colId = DB.addCollection(colName)
+    // DB.addItem(colId, {
+    //     host: "searchteam-suggest-api.osrch.stg.s.o3.ru:82",
+    //     metadata: "",
+    //     method: "suggests.RedirectService.Get",
+    //     name: "testicus",
+    //     request: "pus pus"
+    // })
+    loadColections()
 }
 
 function addItem(itemName, colId) {
@@ -244,27 +222,23 @@ function addItem(itemName, colId) {
 }
 
 function removeCollection(id) {
-    DB.removeCollection(id, () => {
-        document.querySelector('.collection[data-id="' + id + '"]').remove()
-    })
+    DB.removeCollection(parseInt(id))
+    document.querySelector('.collection[data-id="' + id + '"]').remove()
 }
 
-async function getItemTab(_id, tabTitle) {
+function getItemTab(_id, tabTitle) {
+
     addNewTab(_id, tabTitle) // ничего не ретёрнит
     var tabObj = getCurrentTab()
-    var item = await DB.getItem(_id)
-    // return item
-    // DB.getItem(_id).then(result => {
-    console.log(item)
-    // tabObj.tab_host.value = result.host
-    // tabObj.tab_request.setValue(result.request)
-    // tabObj.tab_meta.value = result.metadata
-    // var option = document.createElement("option");
-    // option.value = result.method;
-    // option.text = result.method.split(/[.]+/).pop();
-    // tabObj.tab_method.innerHTML = ''
-    // tabObj.tab_method.appendChild(option)
-    // })
+    var result = DB.getItem(parseInt(_id))
+    tabObj.tab_host.value = result.host
+    tabObj.tab_request.setValue(result.request)
+    tabObj.tab_meta.value = result.metadata
+    var option = document.createElement("option");
+    option.value = result.method;
+    option.text = result.method.split(/[.]+/).pop();
+    tabObj.tab_method.innerHTML = ''
+    tabObj.tab_method.appendChild(option)
 }
 
 function sendRequest(_obj) {
@@ -434,7 +408,8 @@ function closeCurrentTab() {
 }
 
 function loadColections() {
-    showWaiting(getCurrentTab())
+    var tabj = getCurrentTab()
+    showWaiting(tabj)
     var cols = DB.getCollections()
     let sidebar = document.querySelector('#accordionSidebar')
     document.querySelectorAll('#accordionSidebar .nav-item').forEach(e => e.parentNode.removeChild(e));
@@ -442,7 +417,6 @@ function loadColections() {
     modalList.innerHTML = ''
     for (i = 0; i < cols.length; i++) {
         var items = cols[i].items
-
         // Модалка
         if (items.length > 0) {
             var option = document.createElement("option");
@@ -492,19 +466,15 @@ function loadColections() {
     }
     let queryItems = document.querySelectorAll('.collapse-item')
     queryItems.forEach(function (elem) {
-        elem.addEventListener('click', function(){
+        elem.addEventListener('click', function () {
             tempItem.item_id = elem.getAttribute('data-id')
             tempItem.item_name = elem.textContent
             tempItem.collection_id = 'test_id'
             tempItem.collection_name = 'test_name'
-            getItemTab(tempItem.item_id, elem.textContent).then(res => {
-                console.log(res)
-            })
+            getItemTab(tempItem.item_id, elem.textContent)
         })
     });
 }
-
-
 
 function monacoInit(_tabId) {
     var editorsObj = {}
@@ -531,18 +501,18 @@ function showSuccess(tab) {
 }
 
 function showWaiting(tab) {
-    // var _default = document.querySelector('#' + tab.tab_id + ' .icon-default')
-    // var _hover = document.querySelector('#' + tab.tab_id + ' .icon-waiting')
-    // _hover.style.transform = 'scale(1)'
-    // _hover.style.opacity = '1'
-    // _default.style.transform = 'scale(.5)'
-    // _default.style.opacity = '0'
-    // setTimeout(() => {
-    //     _hover.style.transform = 'scale(.5)'
-    //     _hover.style.opacity = '0'
-    //     _default.style.transform = 'scale(1)'
-    //     _default.style.opacity = '1'
-    // }, 1200);
+    var _default = document.querySelector('#' + tab.tab_id + ' .icon-default')
+    var _hover = document.querySelector('#' + tab.tab_id + ' .icon-waiting')
+    _hover.style.transform = 'scale(1)'
+    _hover.style.opacity = '1'
+    _default.style.transform = 'scale(.5)'
+    _default.style.opacity = '0'
+    setTimeout(() => {
+        _hover.style.transform = 'scale(.5)'
+        _hover.style.opacity = '0'
+        _default.style.transform = 'scale(1)'
+        _default.style.opacity = '1'
+    }, 1200);
 }
 
 function getRandomInt(max) {
@@ -575,16 +545,9 @@ function showWarning(msg) {
 }
 
 function exportCollections(path) {
-    API.export_collections((result) => {
-        fs.writeFile(path, JSON.stringify(result, undefined, 4), function (err) {
-            if (err) {
-                return console.log(err);
-            }
-            console.log("The file was saved!");
-        });
-        _obj = getCurrentTab()
-        showSuccess(_obj)
-    })
+    DB.exportCollections(path)
+    _obj = getCurrentTab()
+    showSuccess(_obj)
 }
 
 function importCollections(path) {
@@ -604,9 +567,6 @@ function init_client() {
     monacoInit('tab-0')
     loader.style.display = 'none';
     loadColections();
-
-    // getItemTab(3, 'check')
-
     initObject = {}
     initObject.tab_id = 0
     initObject.saved = document.querySelector('.tab-pane.fade.show.active').getAttribute('saved')

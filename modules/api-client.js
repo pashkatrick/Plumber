@@ -7,10 +7,7 @@ let resourcesURL = path.join(process.resourcesPath);
 var base_command = resourcesURL + '/grpcurl -plaintext '
 
 class API {
-    constructor() {
-        this.users = 'https://jsonplaceholder.typicode.com/users';
-        this.posts = 'https://jsonplaceholder.typicode.com/posts';
-    }
+    constructor() {}
 
     async sendRequest(host, method, req, metadata) {
         var command = `${base_command} -d '${req}' ${host} ${method}`
