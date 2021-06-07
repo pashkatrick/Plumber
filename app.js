@@ -592,8 +592,8 @@ function importCollections() {
     fs.readFile(path[0], (err, data) => {
         if (err) throw err;
         DB.importCollections(JSON.parse(data))
-    });
-    showSuccess(_obj)    
+    })
+    showSuccess(_obj)
     loadColections()
 }
 
