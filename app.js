@@ -1,6 +1,7 @@
 const ApiClient = require("./modules/api-client")
 const DbClient = require("./modules/db-client")
-const path = require('path');
+// const path = require('path');
+const fs = require('fs');
 const { ipcRenderer, remote, shell } = require('electron');
 const dialog = remote.dialog;
 const monaco = require('monaco-loader');
@@ -51,11 +52,11 @@ ipcRenderer.on('tab-new-empty', (event, arg) => {
 })
 
 ipcRenderer.on('enter-action', (event, arg) => {
-    // TODO: сделать отправку запроса
+    sendRequest()
 })
 
 ipcRenderer.on('save-action', (event, arg) => {
-    // TODO: сделать сохранение
+    saveAction()
 })
 
 newTab.addEventListener('click', () => {
@@ -67,79 +68,113 @@ const isOnId = (path, id) => path.some(element => element.id === id);
 document.addEventListener('click', function (e) {
     e.preventDefault();
     if (isOnId(e.path, 'refresh')) {
-        var _obj = getCurrentTab()
-        loadMethods(_obj)
+
+        loadMethods()
+
     } else if (isOnId(e.path, 'save')) {
-        var _obj = getCurrentTab()
-        if (_obj.saved == 'true') {
-            var object = {
-                id: parseInt(_obj.tab_id.split(/[-]+/).pop()),
-                name: _obj.tab_name,
-                host: _obj.tab_host.value,
-                method: _obj.tab_method.value,
-                request_body: _obj.tab_request.getValue(),
-                metadata: _obj.tab_meta.value,
-                collection_id: document.querySelector('#accordionSidebar a.nav-link:not(.collapsed)').getAttribute('data-id')
-            }
-            DB.updateItem(object)
-            showSuccess(_obj)
-        } else {
-            openModal()
-        }
+
+        saveAction()
+
     } else if (isOnId(e.path, 'send')) {
-        var _obj = getCurrentTab()
-        sendRequest(_obj)
+
+        sendRequest()
 
     } else if (isOnId(e.path, 'trash')) {
+
         var _obj = getCurrentTab()
         if (_obj.saved == 'true') {
             DB.removeItem(parseInt(_obj.tab_id.split(/[-]+/).pop()))
             loadColections()
         }
-    } else if (isOnId(e.path, 'template')) {
-        var _obj = getCurrentTab()
-        loadTemplateMessage(_obj)
-    } else if (isOnId(e.path, 'close-modal')) {
-        closeModal()
-    } else if (isOnId(e.path, 'edit-collection')) {
-        editCollection(e.target.closest('.collection').getAttribute('data-id'))
-    } else if (isOnId(e.path, 'remove-collection')) {
-        removeCollection(e.target.closest('.collection').getAttribute('data-id'))
-    } else if (isOnId(e.path, 'save-item')) {
-        colName = document.querySelector('#collection-name').value
-        colId = document.querySelector('#collections').value
-        itemName = document.querySelector('#item-name').value
 
-        if (itemName && colName) {
-            addItemWithCollection(itemName, colName)
-        } else if (itemName && colId) {
-            addItem(itemName, colId)
-        } else {
-            showWarning('Complete form fields first')
-        }
+    } else if (isOnId(e.path, 'template')) {
+
+        loadTemplateMessage()
+
+    } else if (isOnId(e.path, 'close-modal')) {
+
         closeModal()
+
+    } else if (isOnId(e.path, 'edit-collection')) {
+
+        editCollection(e.target.closest('.collection').getAttribute('data-id'))
+
+    } else if (isOnId(e.path, 'remove-collection')) {
+
+        removeCollection(e.target.closest('.collection').getAttribute('data-id'))
+
+    } else if (isOnId(e.path, 'save-item')) {
+
+        saveItem()
+
     } else if (isOnId(e.path, 'export')) {
-        var export_path = dialog.showOpenDialog(remote.getCurrentWindow(), { properties: ['openDirectory'] })
-        exportCollections(export_path + '/plumber-export.json')
+
+        exportCollections()
+
     } else if (isOnId(e.path, 'import')) {
-        var import_file = dialog.showOpenDialog(remote.getCurrentWindow(), {
-            properties: ['openFile'],
-            filters: [{ name: "All Files", extensions: ["json"] }]
-        })
-        importCollections(import_file)
+
+        importCollections()
+
     } else if (isOnId(e.path, 'meta')) {
-        var _obj = getCurrentTab()
-        _obj.tab_meta.style.display = (_obj.tab_meta.style.display == 'block') ? 'none' : 'block'
+
+        initMetadata()
+
     } else if (isOnId(e.path, 'support')) {
+
         shell.openExternal("tg://resolve?domain=pashkatrick")
+
     } else if (isOnId(e.path, 'newsletter')) {
+
         shell.openExternal("https://pshktrck.ru/plumber/")
+
     } else if (isOnId(e.path, 'issue')) {
+
         shell.openExternal("https://github.com/pashkatrick/Plumber/issues")
+
     } else if (isOnId(e.path, 'donate')) {
+
         shell.openExternal("https://www.buymeacoffee.com/pashkatrick")
+
     }
 });
+
+function saveAction() {
+    var _obj = getCurrentTab()
+    if (_obj.saved == 'true') {
+        var object = {
+            id: parseInt(_obj.tab_id.split(/[-]+/).pop()),
+            name: _obj.tab_name,
+            host: _obj.tab_host.value,
+            method: _obj.tab_method.value,
+            request: _obj.tab_request.getValue(),
+            metadata: _obj.tab_meta.value,
+            collection_id: document.querySelector('#accordionSidebar a.nav-link:not(.collapsed)').getAttribute('data-id')
+        }
+        DB.updateItem(object)
+        showSuccess(_obj)
+    } else {
+        openModal()
+    }
+}
+
+function saveItem() {
+    var colName = document.querySelector('#collection-name').value
+    var colId = document.querySelector('#collections').value
+    var itemName = document.querySelector('#item-name').value
+    if (itemName && colName) {
+        addItemWithCollection(itemName, colName)
+    } else if (itemName && colId) {
+        addItem(itemName, colId)
+    } else {
+        showWarning('Complete form fields first')
+    }
+    closeModal()
+}
+
+function initMetadata() {
+    var _obj = getCurrentTab()
+    _obj.tab_meta.style.display = (_obj.tab_meta.style.display == 'block') ? 'none' : 'block'
+}
 
 function setCurrentTab(_currentTabObj) {
     currentTabObj = {}
@@ -196,29 +231,21 @@ function updateMenuCollection(name, collection_id) {
 
 function addItemWithCollection(itemName, colName) {
     var colId = DB.addCollection(colName)
-    // DB.addItem(colId, {
-    //     host: "searchteam-suggest-api.osrch.stg.s.o3.ru:82",
-    //     metadata: "",
-    //     method: "suggests.RedirectService.Get",
-    //     name: "testicus",
-    //     request: "pus pus"
-    // })
-    loadColections()
+    addItem(itemName, colId)
 }
 
 function addItem(itemName, colId) {
-    tab = getCurrentTab()
-    itemObj = {
+    var tab = getCurrentTab()
+    var itemObj = {
         name: itemName,
         host: tab.tab_host.value,
         method: tab.tab_method.value,
-        request_body: tab.tab_request.getValue(),
+        request: tab.tab_request.getValue(),
         metadata: tab.tab_meta.value,
-        collection_id: colId
+        collection_id: parseInt(colId)
     }
-    DB.addItem(JSON.stringify(itemObj), () => {
-        loadColections()
-    })
+    DB.addItem(itemObj)
+    loadColections()
 }
 
 function removeCollection(id) {
@@ -227,7 +254,6 @@ function removeCollection(id) {
 }
 
 function getItemTab(_id, tabTitle) {
-
     addNewTab(_id, tabTitle) // ничего не ретёрнит
     var tabObj = getCurrentTab()
     var result = DB.getItem(parseInt(_id))
@@ -241,7 +267,8 @@ function getItemTab(_id, tabTitle) {
     tabObj.tab_method.appendChild(option)
 }
 
-function sendRequest(_obj) {
+function sendRequest() {
+    var _obj = getCurrentTab()
     API.sendRequest(
         _obj.tab_host.value,
         _obj.tab_method.value,
@@ -262,7 +289,9 @@ function closeModal() {
     document.querySelector('#item-name').innerHTML = ''
 }
 
-function loadMethods(tab) {
+function loadMethods() {
+
+    var tab = getCurrentTab()
     API.methodList(tab.tab_host.value, tab.tab_meta.value).then(result => {
         var meths = result
         methods = document.querySelector('#' + tab.tab_id + ' #methods')
@@ -519,7 +548,8 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-function loadTemplateMessage(_obj) {
+function loadTemplateMessage() {
+    var _obj = getCurrentTab()
     API.messageTemplate(_obj.tab_host.value, _obj.tab_method.value, _obj.tab_meta.value).then(result => {
         _obj.tab_request.setValue(JSON.stringify(result, undefined, 4));
         showSuccess(_obj)
@@ -544,24 +574,28 @@ function showWarning(msg) {
     }, 3500);
 }
 
-function exportCollections(path) {
+function exportCollections() {
+
+    var export_path = dialog.showOpenDialog(remote.getCurrentWindow(), { properties: ['openDirectory'] })
+    var path = export_path + '/plumber-export.json'
     DB.exportCollections(path)
     _obj = getCurrentTab()
     showSuccess(_obj)
 }
 
-function importCollections(path) {
+function importCollections() {
+    var _obj = getCurrentTab()
+    var path = dialog.showOpenDialog(remote.getCurrentWindow(), {
+        properties: ['openFile'],
+        filters: [{ name: "All Files", extensions: ["json"] }]
+    })
     fs.readFile(path[0], (err, data) => {
         if (err) throw err;
-        API.import_collections(JSON.parse(data), (result) => {
-            _obj = getCurrentTab()
-            showSuccess(_obj)
-            console.log(result)
-        })
+        DB.importCollections(JSON.parse(data))
+        showSuccess(_obj)
         loadColections()
     });
 }
-
 
 function init_client() {
     monacoInit('tab-0')

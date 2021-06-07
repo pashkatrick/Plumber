@@ -3,7 +3,12 @@ const path = require('path');
 const fs = require('fs');
 
 const store = new Store({
-    configName: 'collections'
+    configName: 'collections',
+    defaults: {
+        collections: [],
+        collectionsCount: 0,
+        itemsCount: 0
+    }
 });
 
 Array.prototype.remove = function () {
@@ -18,7 +23,7 @@ Array.prototype.remove = function () {
 };
 
 class DB_API {
-    constructor() {}
+    constructor() { }
 
     addCollection(collectionName) {
         var collections = this.getCollections()
@@ -29,20 +34,20 @@ class DB_API {
         return newCount
     }
 
-    addItem(collectionId, object) {
+    addItem(object) {
         var doc = this.getCollections()
+        var currCount = this.__getItemsCount()
         var response
         doc.forEach(function (collection) {
-            if (collection.id === collectionId) {
-                // var newCount = this.__getItemsCount() + 1
-                var newCount = doc.length + 1
+            if (collection.id === object.collection_id) {
+                var newCount = currCount + 1
                 object.id = newCount
                 collection.items.push(object)
                 store.set('collections', doc)
-                // this.__setItemsCount(newCount)
                 response = newCount
             }
         });
+        this.__setItemsCount(response)
         return response
     }
 
@@ -131,7 +136,6 @@ class DB_API {
             var __items = collection.items
             __items.forEach(function (item) {
                 if (item.id === object.id) {
-                    console.log(object)
                     __items.remove(item)
                     __items.push(object)
                     store.set('collections', doc)
@@ -143,7 +147,7 @@ class DB_API {
     }
 
     importCollections(file) {
-
+        store.import(file)
     }
 
     exportCollections(path) {

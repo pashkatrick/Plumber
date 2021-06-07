@@ -21,6 +21,10 @@ class Store {
     fs.writeFileSync(path, JSON.stringify(this.data));
   }
 
+  import(file) {
+    fs.writeFileSync(this.path, JSON.stringify(file));
+  }
+
 }
 
 function parseDataFile(filePath, defaults) {
