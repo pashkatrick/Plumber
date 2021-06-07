@@ -1,6 +1,6 @@
 {
     "name": "Plumber",
-    "version": "1.2.0",
+    "version": "2.0.0",
     "description": "A really missing GUI for GRPC requests",
     "author": "pashkatrick",
     "main": "main.js",
@@ -27,15 +27,14 @@
         "fs": "0.0.1-security",
         "monaco-editor": "^0.17.0",
         "monaco-loader": "^1.0.0",
-        "npm": "^7.15.1",
         "utf8": "^3.0.0"
     },
     "devDependencies": {
         "electron": "^4.2.12",
+        "electron-installer-dmg": "^3.0.0",
+        "electron-installer-windows": "^3.0.0",
         "electron-localshortcut": "^3.2.1",
         "electron-packager": "^15.2.0",
-        "electron-installer-dmg": "*",
-        "electron-installer-windows": "*",
         "electron-rebuild": "^1.11.0",
         "electron-squirrel-startup": "^1.0.0"
     }
