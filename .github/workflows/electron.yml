@@ -46,12 +46,6 @@ jobs:
           tar -zxvf grpc_64.tar.gz
           ls .
           ls .\node_modules\electron\dist\
-          mv grpcurl.exe .\node_modules\electron\dist\Electron.app\Contents\Resources\grpcurl
-          rm -rf grpc_64.tar.gz
-          npm run win-pkg
-          npm run exe        
-          ls release-build
-          ls release-build-exe
       - name: Step 3 - Use the Upload Artifact GitHub Action
         uses: actions/upload-artifact@v2
         with:
