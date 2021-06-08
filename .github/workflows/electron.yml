@@ -47,7 +47,7 @@ jobs:
           ls .
           ls .\node_modules\electron\dist\resources
           mv grpcurl.exe .\node_modules\electron\dist\resources\grpcurl
-          rm -rf grpc_64.tar.gz
+          del /f grpc_64.tar.gz
           npm run win-pkg
           npm run exe        
           ls release-build
