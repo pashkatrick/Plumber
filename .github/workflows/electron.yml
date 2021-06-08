@@ -47,6 +47,7 @@ jobs:
           mv grpcurl.exe .\node_modules\electron\dist\resources\grpcurl
           npm run win-pkg
           npm run exe        
+          ls .
           ls release-build
           ls release-build-exe
       - name: Step 3 - Use the Upload Artifact GitHub Action
