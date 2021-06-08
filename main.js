@@ -1,8 +1,5 @@
 const { app, BrowserWindow, globalShortcut, Menu } = require('electron')
 const path = require('path')
-const config = require('./config')
-
-// нужен для хранения данных
 
 let mainWindow
 
@@ -29,15 +26,12 @@ function createWindow() {
     minHeight: 800,
     webPreferences: {
       nodeIntegration: true,
-      experimentalFeatures: true
+      experimentalFeatures: true,
+      additionalArguments: ["--platform=" + process.platform]
     }
   })
 
   mainWindow.loadFile(path.join('app', 'index.html'))
-
-  if (config.DEBUG) {
-    mainWindow.webContents.openDevTools()
-  }
 
   mainWindow.on('closed', function () {
     mainWindow = null

@@ -1,6 +1,5 @@
 const ApiClient = require("./modules/api-client")
 const DbClient = require("./modules/db-client")
-// const path = require('path');
 const fs = require('fs');
 const { ipcRenderer, remote, shell } = require('electron');
 const dialog = remote.dialog;
@@ -32,6 +31,7 @@ var editorConfig = {
         horizontalScrollbarSize: 0,
     }
 }
+
 
 // INIT
 try {
