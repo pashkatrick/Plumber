@@ -3,19 +3,28 @@ const path = require('path')
 const utf8 = require('utf8');
 let resourcesURL = path.join(process.resourcesPath);
 
-// TODO: metadata needed
 var base_command = resourcesURL + '/grpcurl -plaintext '
 
 class API {
-    constructor() {}
+    constructor() { }
 
     async sendRequest(host, method, req, metadata) {
-        var command = `${base_command} -d '${req}' ${host} ${method}`
+        rpcHeaders = []
+        var command
+        if (metadata) {
+            json_meta = JSON.parse(metadata)
+            json_meta.forEach((header) => {
+                rpcHeaders.push(`-rpc-header ~${header}:${json_meta[header]}`)
+            })
+            command = `${base_command} ${rpcHeaders} -d '${req}' ${host} ${method}`
+        } else {
+            command = `${base_command} -d '${req}' ${host} ${method}`
+        }
         var response = await this.__execute(command)
         return response = JSON.parse(response);
     }
 
-    async messageTemplate(host, method, metadata) {
+    async messageTemplate(host, method) {
         var request = await this.__viewMethodRequest(host, method)
         var command = `${base_command} -msg-template ${host} describe ${request}`
         var response = await this.__execute(command)
@@ -31,7 +40,7 @@ class API {
         return request
     }
 
-    async methodList(host, metadata) {
+    async methodList(host) {
         var methods = []
         var ss
         await this.serviceList(host).then(services => {

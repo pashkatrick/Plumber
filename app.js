@@ -269,6 +269,7 @@ function getItemTab(_id, tabTitle) {
 
 function sendRequest() {
     var _obj = getCurrentTab()
+    showWaiting(_obj)
     API.sendRequest(
         _obj.tab_host.value,
         _obj.tab_method.value,
@@ -290,13 +291,12 @@ function closeModal() {
 }
 
 function loadMethods() {
-
     var tab = getCurrentTab()
-    API.methodList(tab.tab_host.value, tab.tab_meta.value).then(result => {
+    showWaiting(tab)
+    API.methodList(tab.tab_host.value).then(result => {
         var meths = result
         methods = document.querySelector('#' + tab.tab_id + ' #methods')
         methods.innerHTML = ''
-        showWaiting(tab)
         for (var i = 0; i < meths.length; i++) {
             option = document.createElement("option");
             option.value = meths[i].service;
@@ -550,7 +550,8 @@ function getRandomInt(max) {
 
 function loadTemplateMessage() {
     var _obj = getCurrentTab()
-    API.messageTemplate(_obj.tab_host.value, _obj.tab_method.value, _obj.tab_meta.value).then(result => {
+    showWaiting(_obj)
+    API.messageTemplate(_obj.tab_host.value, _obj.tab_method.value).then(result => {
         _obj.tab_request.setValue(JSON.stringify(result, undefined, 4));
         showSuccess(_obj)
     })
