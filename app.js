@@ -79,6 +79,10 @@ document.addEventListener('click', function (e) {
 
         sendRequest()
 
+    } else if (isOnId(e.path, 'create')) {
+
+        saveAction()        
+
     } else if (isOnId(e.path, 'trash')) {
 
         var _obj = getCurrentTab()
