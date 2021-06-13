@@ -4,7 +4,6 @@
 <h1 align="center">Plumber</h1>
 
 <p align="center">
-  <a href="https://github.com/pashkatrick/Plumber-API"><img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg" />  
   <a href="https://github.com/pashkatrick/Plumber"><img src="https://img.shields.io/badge/Build%20with-Electron-1f425f.svg" />
   <a href="https://pshktrck.ru/plumber/">
     <img src="https://img.shields.io/badge/changelog-👈-green.svg" />
@@ -28,24 +27,24 @@ I just create a GUI for [GRPCurl](https://github.com/fullstorydev/grpcurl). This
 > You can use it only with servers, which support reflection API.
 
 ## Features
-...
+- Reflection server methods access
+- Multi tabs operations
+- Independent requests store system
+- Metadata support
+- ...
+
+### Shortcuts
+
+<kbd>CMD</kbd>+<kbd>w</kbd>: close tab  
+<kbd>CMD</kbd>+<kbd>t</kbd>: new tab  
+<kbd>CMD</kbd>+<kbd>s</kbd>: save request  
+<kbd>CMD</kbd>+<kbd>Enter</kbd>: send request  
 
 ### Requirenments
 - Docker
 
 
-## Build and launch 🚀
-- download last version build
+## Get Started 🚀
+- download [last version](https://github.com/pashkatrick/Plumber/releases/) Plumber.dmg or Plumber.exe
 - install it
-- use ``` docker pull pashkatrick/plumber-api ```
-- and ``` docker run ... ```
-<!--
-Create or set data to your .env ([example](https://github.com/pashkatrick/Plumber/blob/tcp-move/env-example), [details](https://pypi.org/project/python-decouple/#usage)), and after that:
-```
-- python3 app.py
-``` -->
-
-<!-- You can use second instanse of termial, to execute first test command:
-```bash
-zerorpc tcp://localhost:1111 test
-``` -->
+- thats it!
