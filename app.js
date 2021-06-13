@@ -466,20 +466,21 @@ function loadColections() {
                 <li class="nav-item">
                     <div class="collection" data-id=${cols[i].id}>
                         <a href="#" class="nav-link collapsed" data-id=${cols[i].id} data-toggle="collapse" data-target="#${identic}" aria-expanded="false" aria-controls="${identic}">
-                            <i class="far fa-folder"></i>
-                            <span class="orange items-count"> -${items.length}- </span><span class="collectionName">${cols[i].collection}</span>
+                            <img src="https://img.icons8.com/color/18/000000/folder-invoices--v2.png"/>
+                            <span class="orange items-count"> ${items.length}- </span><span class="collectionName">${cols[i].collection}</span>
                         </a>
                         <a href="#" class="col-settings" data-settings="${identic}-set"  data-toggle="collapse" data-target="#${identic}-set" aria-expanded="true" aria-controls="${identic}-set">...</a>
                         <div class="settings-block bt collapse" id="${identic}-set">
                             <ul>
                                 <li>
-                                    <a href="#" id="share-collection" disabled>📢</a>
+                                    <a href="#" id="edit-collection">
+                                        <img src="https://img.icons8.com/color/20/000000/edit--v2.png"/>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="#" id="edit-collection">✍🏽</a>
-                                </li>
-                                <li>
-                                    <a href="#" id="remove-collection">🗑️</a>
+                                    <a href="#" id="remove-collection">
+                                        <img src="https://img.icons8.com/color/20/000000/empty-trash--v2.png"/>
+                                    </a>
                                 </li>
                             </ul>
                         </div>

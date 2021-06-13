@@ -116,52 +116,15 @@ app.on('ready', function () {
           role: 'close'
         }
       ]
-    },
-    {
-      role: 'help',
-      submenu: [
-        {
-          label: 'Learn More',
-          click() {
-            shell.openExternal('https://electronjs.org')
-          }
-        },
-        {
-          label: 'Documentation',
-          click() {
-            shell.openExternal(
-              `https://github.com/electron/electron/tree/v${process.versions.electron}/docs#readme`
-            )
-          }
-        },
-        {
-          label: 'Community Discussions',
-          click() {
-            shell.openExternal('https://discuss.atom.io/c/electron')
-          }
-        },
-        {
-          label: 'Search Issues',
-          click() {
-            shell.openExternal('https://github.com/electron/electron/issues')
-          }
-        }
-      ]
     }
   ]
 
   if (process.platform === 'darwin') {
     template.unshift({
-      label: 'Electron',
+      label: 'Plumber',
       submenu: [
         {
           role: 'about'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          role: 'services'
         },
         {
           type: 'separator'
@@ -243,6 +206,6 @@ app.on('browser-window-focus', function () {
 })
 
 // Hot Reload
-try {
-  require('electron-reloader')(module)
-} catch (_) { }
+// try {
+//   require('electron-reloader')(module)
+// } catch (_) { }
