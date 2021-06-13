@@ -10,7 +10,7 @@
         "start": "electron .",
         "npm-install": "node_modules/.bin/electron-rebuild; npm install",
         "mac-pkg": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-build --extra-resource=./node_modules/electron/dist/Electron.app/Contents/Resources/grpcurl --icon=assets/app.icns",
-        "win-pkg": "electron-packager . --overwrite --platform=win32 --arch=x64 --prune=true --out=release-build --extra-resource=./node_modules/electron/dist/resources/grpcurl --icon=assets/app.ico",
+        "win-pkg": "electron-packager . --overwrite --platform=win32 --arch=x64 --prune=true --out=release-build --extra-resource=./node_modules/electron/dist/resources/grpcurl.exe --icon=assets/app.ico",
         "dmg": "electron-installer-dmg release-build/Plumber-darwin-x64/Plumber.app/ Plumber --out=release-build-dmg --overwrite --icon=assets/app.icns",
         "exe": "electron-installer-windows --src release-build/Plumber-win32-x64/ --dest release-build-exe --overwrite --icon=assets/app.ico"
     },
