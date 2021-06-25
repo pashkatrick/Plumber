@@ -153,6 +153,7 @@ function saveAction() {
             id: parseInt(_obj.tab_id.split(/[-]+/).pop()),
             name: _obj.tab_name,
             host: _obj.tab_host.value,
+            port: _obj.tab_port.value,
             method: _obj.tab_method.value,
             request: _obj.tab_request.getValue(),
             metadata: _obj.tab_meta.value,
@@ -189,6 +190,7 @@ function setCurrentTab(_currentTabObj) {
     currentTabObj.tab_id = _currentTabObj.tab_id
     currentTabObj.saved = _currentTabObj.saved
     currentTabObj.tab_host = _currentTabObj.tab_host
+    currentTabObj.tab_port = _currentTabObj.tab_port
     currentTabObj.tab_method = _currentTabObj.tab_method
     currentTabObj.tab_request = _currentTabObj.tab_request
     currentTabObj.tab_response = _currentTabObj.tab_response
@@ -202,6 +204,7 @@ function getCurrentTab() {
     currentTabObj.tab_name = document.querySelector('.nav-link.active').textContent
     currentTabObj.saved = document.querySelector('.tab-pane.fade.show.active').getAttribute('saved')
     currentTabObj.tab_host = document.querySelector('#' + currentTab + ' #host')
+    currentTabObj.tab_port = document.querySelector('#' + currentTab + ' #port')
     currentTabObj.tab_method = document.querySelector('#' + currentTab + ' #methods')
     currentTabObj.tab_meta = document.querySelector('#' + currentTab + ' #metadata')
     currentTabObj.tab_request = editorsList.find(e => e.editor_id === currentTab).editor_req
@@ -247,6 +250,7 @@ function addItem(itemName, colId) {
     var itemObj = {
         name: itemName,
         host: tab.tab_host.value,
+        port: tab.tab_port.value,
         method: tab.tab_method.value,
         request: tab.tab_request.getValue(),
         metadata: tab.tab_meta.value,
@@ -266,6 +270,7 @@ function getItemTab(_id, tabTitle) {
     var tabObj = getCurrentTab()
     var result = DB.getItem(parseInt(_id))
     tabObj.tab_host.value = result.host
+    tabObj.tab_port.value = result.port
     tabObj.tab_request.setValue(result.request)
     tabObj.tab_meta.value = result.metadata
     var option = document.createElement("option");
@@ -280,6 +285,7 @@ function sendRequest() {
     showWaiting(_obj)
     API.sendRequest(
         _obj.tab_host.value,
+        _obj.tab_port.value,
         _obj.tab_method.value,
         _obj.tab_request.getValue(),
         _obj.tab_meta.value).then(result => {
@@ -301,7 +307,7 @@ function closeModal() {
 function loadMethods() {
     var tab = getCurrentTab()
     showWaiting(tab)
-    API.methodList(tab.tab_host.value).then(result => {
+    API.methodList(tab.tab_host.value, tab.tab_port.value).then(result => {
         var meths = result
         methods = document.querySelector('#' + tab.tab_id + ' #methods')
         methods.innerHTML = ''
@@ -363,8 +369,8 @@ function _generateTab(id, saved, tabName) {
                 <ul class="navbar-nav mr-auto align-items-center justify-content-center">
                     <li class="nav-item mx-2">
                         <div class="input-group">
-                            <input type="text" id="host" class="form-control bg-grey" placeholder="server:82">
-                            // <input type="text" id="port" class="form-control bg-grey" value=":82">
+                            <input type="text" id="host" class="form-control bg-grey" placeholder="server">
+                            <input type="text" id="port" class="form-control bg-grey" value=":82">
                         </div>
                     </li>
                     <li>
@@ -451,7 +457,7 @@ function _generateTab(id, saved, tabName) {
     currentTabObj.tab_name = tabName
     currentTabObj.saved = saved
     currentTabObj.tab_host = document.querySelector('#tab-' + id + ' #host')
-    currentTabObj.tab_port = document.querySelector('#tab-' + id + ' #host')
+    currentTabObj.tab_port = document.querySelector('#tab-' + id + ' #port')
     currentTabObj.tab_method = document.querySelector('#tab-' + id + ' #methods')
     currentTabObj.tab_request = document.querySelector('#tab-' + id + ' #request')
     currentTabObj.tab_meta = document.querySelector('#tab-' + id + ' #metadata')
@@ -468,8 +474,8 @@ function _generateCopiedTab(id, saved, tabName, tabObject) {
                 <ul class="navbar-nav mr-auto align-items-center justify-content-center">
                     <li class="nav-item mx-2">
                         <div class="input-group">
-                            <input type="text" id="host" class="form-control bg-grey" placeholder="server:82" value="${tabObject.tab_host.value}" >
-                            // <input type="text" id="port" class="form-control bg-grey" value=":82">
+                            <input type="text" id="host" class="form-control bg-grey" placeholder="server" value="${tabObject.tab_host.value}" >
+                            <input type="text" id="port" class="form-control bg-grey" value="${tabObject.tab_port.value}">
                         </div>                        
                     </li>
                     <li>
@@ -557,6 +563,7 @@ function _generateCopiedTab(id, saved, tabName, tabObject) {
     currentTabObj.tab_name = tabName
     currentTabObj.saved = saved
     currentTabObj.tab_host = document.querySelector('#tab-' + id + ' #host')
+    currentTabObj.tab_port = document.querySelector('#tab-' + id + ' #port')
     currentTabObj.tab_method = document.querySelector('#tab-' + id + ' #methods')
     currentTabObj.tab_request = document.querySelector('#tab-' + id + ' #request')
     currentTabObj.tab_meta = document.querySelector('#tab-' + id + ' #metadata')
@@ -692,7 +699,7 @@ function getRandomInt(max) {
 function loadTemplateMessage() {
     var _obj = getCurrentTab()
     showWaiting(_obj)
-    API.messageTemplate(_obj.tab_host.value, _obj.tab_method.value).then(result => {
+    API.messageTemplate(_obj.tab_host.value, _obj.tab_port.value, _obj.tab_method.value).then(result => {
         _obj.tab_request.setValue(JSON.stringify(result, undefined, 4));
         showSuccess(_obj)
     })
@@ -747,6 +754,7 @@ function init_client() {
     initObject.tab_id = 0
     initObject.saved = document.querySelector('.tab-pane.fade.show.active').getAttribute('saved')
     initObject.tab_host = document.querySelector('#tab-0 #host')
+    initObject.tab_port = document.querySelector('#tab-0 #port')
     initObject.tab_method = document.querySelector('#tab-0 #methods')
     initObject.tab_meta = document.querySelector('#tab-0 #metadata')
     initObject.tab_request = editorsList.find(e => e.editor_id === 'tab-0').editor_req // - да, у реквеста берем value

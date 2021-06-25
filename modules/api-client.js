@@ -8,7 +8,7 @@ var base_command = resourcesURL + '/grpcurl -plaintext '
 class API {
     constructor() { }
 
-    async sendRequest(host, method, req, metadata) {
+    async sendRequest(host, port, method, req, metadata) {
         rpcHeaders = []
         var command
         if (metadata) {
@@ -16,23 +16,23 @@ class API {
             json_meta.forEach((header) => {
                 rpcHeaders.push(`-rpc-header ~${header}:${json_meta[header]}`)
             })
-            command = `${base_command} ${rpcHeaders} -d '${req}' ${host} ${method}`
+            command = `${base_command} ${rpcHeaders} -d '${req}' ${host}${port} ${method}`
         } else {
-            command = `${base_command} -d '${req}' ${host} ${method}`
+            command = `${base_command} -d '${req}' ${host}${port} ${method}`
         }
         var response = await this.__execute(command)
         return response = JSON.parse(response);
     }
 
-    async messageTemplate(host, method) {
-        var request = await this.__viewMethodRequest(host, method)
-        var command = `${base_command} -msg-template ${host} describe ${request}`
+    async messageTemplate(host, port, method) {
+        var request = await this.__viewMethodRequest(host, port, method)
+        var command = `${base_command} -msg-template ${host}${port} describe ${request}`
         var response = await this.__execute(command)
         return JSON.parse(response.split('Message template:')[1].replace('\n', '').replace(' ', ''))
     }
 
-    async __viewMethodRequest(host, method) {
-        var command = `${base_command} ${host} describe ${method}`
+    async __viewMethodRequest(host, port, method) {
+        var command = `${base_command} ${host}${port} describe ${method}`
         var response = await this.__execute(command)
         var lines = response.toString().split('\n');
         var out = utf8.decode(lines.join('')).replace(' ', '').replace(';', '')
@@ -40,20 +40,20 @@ class API {
         return request
     }
 
-    async methodList(host) {
+    async methodList(host, port) {
         var methods = []
         var ss
-        await this.serviceList(host).then(services => {
+        await this.serviceList(host, port).then(services => {
             ss = services
         })
-        await this.__methodsFromServices(host, ss).then(resul => {
+        await this.__methodsFromServices(host, port, ss).then(resul => {
             methods = resul
         })
         return methods
     }
 
-    async serviceList(host) {
-        var command = `${base_command} ${host} list`
+    async serviceList(host, port) {
+        var command = `${base_command} ${host}${port} list`
         var services = []
         var res = await this.__execute(command)
         var lines = res.toString().split('\n');
@@ -78,11 +78,11 @@ class API {
             })
         })
     }
-    async __methodsFromServices(host, services) {
+    async __methodsFromServices(host, port, services) {
         var result = []
         for (const service of services) {
             var methods = []
-            var command = `${base_command} ${host} list ${service}`
+            var command = `${base_command} ${host}${port} list ${service}`
             var res = await this.__execute(command)
             var lines = res.toString().split('\n');
             lines.forEach(function (line) {
