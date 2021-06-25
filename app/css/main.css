@@ -425,11 +425,11 @@ hr {
 }
 
 .navbar input {
-  width: 400px;
+  width: 380px;
 }
 
 .navbar select {
-  width: 250px;
+  width: 230px;
   -webkit-appearance: none;
 }
 
@@ -454,7 +454,18 @@ hr {
   /* background-color: #fff; */
   background-clip: padding-box;
   border: none;
-  border-radius: 4px;
+  /* border-radius: 4px; */
+}
+
+#host {
+  width: 320px;
+  border-radius: 4px 0px 0px 4px;
+}
+
+#port {
+  width: 40px;
+  border: 1px solid #e47a3870;
+  border-radius: 0px 4px 4px 0px;
 }
 
 .sidebar .form-control {

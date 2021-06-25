@@ -71,6 +71,10 @@ document.addEventListener('click', function (e) {
 
         loadMethods()
 
+    } else if (isOnId(e.path, 'copy')) {
+
+        copyTab()
+
     } else if (isOnId(e.path, 'save')) {
 
         saveAction()
@@ -81,7 +85,7 @@ document.addEventListener('click', function (e) {
 
     } else if (isOnId(e.path, 'create')) {
 
-        saveAction()        
+        saveAction()
 
     } else if (isOnId(e.path, 'trash')) {
 
@@ -325,11 +329,19 @@ function elementFromHTML(htmlString) {
     return div.firstChild;
 }
 
-function addNewTab(tab_id = 0, tabName = 'Unsaved') {
+function copyTab() {
+    _tab = getCurrentTab()
+    addNewTab(0, 'Copied', _tab);
+}
+
+function addNewTab(tab_id = 0, tabName = 'Unsaved', copyFrom = null) {
     document.querySelector('a.nav-link.active').classList.remove('active')
     document.querySelector('.tab-pane.fade.show.active').classList.remove('show', 'active')
-    if (tab_id == 0) { //если ничего не передали - возвращаем новую
-        var num = getRandomInt(1000)
+    var num = getRandomInt(1000)
+    if (copyFrom != null) {
+        _generateCopiedTab(num, false, tabName, copyFrom)
+
+    } else if (tab_id == 0) { //если ничего не передали - возвращаем новую
         _generateTab(num, false, tabName)
 
     } else if (document.querySelector('#tab-' + tab_id)) { //если передали существующую, открываем ее
@@ -350,34 +362,52 @@ function _generateTab(id, saved, tabName) {
             <nav class="navbar navbar-expand navbar-light topbar static-top bb">
                 <ul class="navbar-nav mr-auto align-items-center justify-content-center">
                     <li class="nav-item mx-2">
-                        <input type="text" id="host" class="form-control bg-grey" placeholder="server:82" />
+                        <div class="input-group">
+                            <input type="text" id="host" class="form-control bg-grey" placeholder="server:82">
+                            // <input type="text" id="port" class="form-control bg-grey" value=":82">
+                        </div>
                     </li>
                     <li>
                         <a href="#" id="meta"><span class="orange">META</span></a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
+                    <li class="nav-item mx-2">
+                        <a class="btn bg-grey" id="copy">
+                            <span class="emoji">
+                                <img src="https://img.icons8.com/cotton/18/000000/copy--v1.png"/>
+                            </span>
+                        </a>
+                    </li>                  
                     <li class="nav-item">
                         <a class="btn bg-grey" id="refresh">
-                            <span class="emoji">🔄</span>
+                            <span class="emoji">
+                                <img src="https://img.icons8.com/cotton/18/000000/loop.png"/>
+                            </span>
                         </a>
                     </li>
                     <li class="nav-item mx-2">
                         <select name="select" id="methods" class="form-control bg-grey"></select>
                     </li>
                     <li class="nav-item">
-                        <a class="btn bg-grey" id="save">
-                            <span class="emoji">💾</span>
+                        <a class="btn bg-grey" id="template">
+                            <span class="emoji">
+                                <img src="https://img.icons8.com/cotton/18/000000/preview-file.png"/>
+                            </span>
                         </a>
-                    </li>
+                    </li>                    
                     <li class="nav-item">
-                        <a class="btn bg-grey mx-2" id="template">
-                            <span class="emoji">📄</span>
+                        <a class="btn bg-grey mx-2" id="save">
+                            <span class="emoji">
+                                <img src="https://img.icons8.com/plumpy/18/000000/save.png"/>
+                            </span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="btn bg-grey" id="trash">
-                            <span class="emoji">🗑️</span>
+                            <span class="emoji">
+                                <img src="https://img.icons8.com/color/18/000000/trash--v1.png"/>
+                            </span>
                         </a>
                     </li>
                 </ul>
@@ -416,6 +446,112 @@ function _generateTab(id, saved, tabName) {
     `)
     document.querySelector('#myTabContent').appendChild(tabContent)
     monacoInit('tab-' + id)
+    var currentTabObj = {}
+    currentTabObj.tab_id = id
+    currentTabObj.tab_name = tabName
+    currentTabObj.saved = saved
+    currentTabObj.tab_host = document.querySelector('#tab-' + id + ' #host')
+    currentTabObj.tab_port = document.querySelector('#tab-' + id + ' #host')
+    currentTabObj.tab_method = document.querySelector('#tab-' + id + ' #methods')
+    currentTabObj.tab_request = document.querySelector('#tab-' + id + ' #request')
+    currentTabObj.tab_meta = document.querySelector('#tab-' + id + ' #metadata')
+    currentTabObj.tab_response = document.querySelector('#tab-' + id + ' #response')
+    setCurrentTab(currentTabObj)
+}
+
+function _generateCopiedTab(id, saved, tabName, tabObject) {
+    var tab = elementFromHTML('<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-' + id + '" role="tab" aria-controls="contact" aria-selected="false">' + tabName + '</a></li>')
+    tabs.insertBefore(tab, newTab.parentNode)
+    var tabContent = elementFromHTML(`
+        <div class="tab-pane fade show active" id="${'tab-' + id}" role="tabpanel" aria-labelledby="${'tab-' + id}" saved="${saved}">
+            <nav class="navbar navbar-expand navbar-light topbar static-top bb">
+                <ul class="navbar-nav mr-auto align-items-center justify-content-center">
+                    <li class="nav-item mx-2">
+                        <div class="input-group">
+                            <input type="text" id="host" class="form-control bg-grey" placeholder="server:82" value="${tabObject.tab_host.value}" >
+                            // <input type="text" id="port" class="form-control bg-grey" value=":82">
+                        </div>                        
+                    </li>
+                    <li>
+                        <a href="#" id="meta"><span class="orange">META</span></a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item mx-2">
+                        <a class="btn bg-grey" id="copy">
+                            <span class="emoji">
+                                <img src="https://img.icons8.com/cotton/18/000000/copy--v1.png"/>
+                            </span>
+                        </a>
+                    </li>                  
+                    <li class="nav-item">
+                        <a class="btn bg-grey" id="refresh">
+                            <span class="emoji">
+                                <img src="https://img.icons8.com/cotton/18/000000/loop.png"/>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <select name="select" id="methods" class="form-control bg-grey"></select>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn bg-grey" id="template">
+                            <span class="emoji">
+                                <img src="https://img.icons8.com/cotton/18/000000/preview-file.png"/>
+                            </span>
+                        </a>
+                    </li>                    
+                    <li class="nav-item">
+                        <a class="btn bg-grey mx-2" id="save">
+                            <span class="emoji">
+                                <img src="https://img.icons8.com/plumpy/18/000000/save.png"/>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn bg-grey" id="trash">
+                            <span class="emoji">
+                                <img src="https://img.icons8.com/color/18/000000/trash--v1.png"/>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <textarea name="metadata" id="metadata" rows=""cols="30" rows="5" placeholder="" value="${tabObject.tab_meta}"></textarea>
+
+            <div class="container-fluid bb">
+                <div class="row">
+                    <div class="col-md-6 request">
+                        Request
+                    </div>
+                    <div class="col-md-6 response">
+                        Response
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 request request-field">
+                        <button class="send" id="send">
+                            <div class="icons">
+                                <i class="fas fa-play icon-default"></i>
+                                <i class="fas fa-check icon-success"></i>
+                                <i class="fas fa-spinner fa-spin icon-waiting"></i>
+                            </div>
+                        </button>
+                        <div id="request"></div>
+                    </div>
+                    <div class="col-md-6 response response-field">
+                        <div id="response"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `)
+    document.querySelector('#myTabContent').appendChild(tabContent)
+    var currEditor = monacoInit('tab-' + id)
+    currEditor.editor_req.setValue(tabObject.tab_request.getValue())
     var currentTabObj = {}
     currentTabObj.tab_id = id
     currentTabObj.tab_name = tabName
