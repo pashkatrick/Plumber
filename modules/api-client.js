@@ -9,7 +9,7 @@ class API {
     constructor() { }
 
     async sendRequest(host, port, method, req, metadata) {
-        rpcHeaders = []
+        var rpcHeaders = []
         var command
         if (metadata) {
             json_meta = JSON.parse(metadata)
